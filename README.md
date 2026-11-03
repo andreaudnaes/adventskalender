@@ -1,5 +1,6 @@
 # Adventskalender 2026
 
+Hvis du er Erlend, IKKE SE!
 En personlig adventskalender med en ny gåte bak hver luke.
 
 - `index.html`: siden
