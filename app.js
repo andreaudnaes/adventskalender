@@ -24,6 +24,19 @@ const LAYOUT = [
   [16, '1', '8'], [21, '3', '8'], [8, '4', '8']
 ];
 
+// Innholdet i hver luke. Svarene er kodet (base64) så de ikke står i klartekst.
+const PUZZLES = {
+  1: { type: 'ordgjetting', answer: 'S0FLQU8=' }
+};
+
+// Belønningen som vises når luken er løst
+const REWARDS = {
+  1: {
+    title: 'En liten hilsen',
+    text: '[Skriv meldingen din til luke 1 her]'
+  }
+};
+
 const TONES = ['#6E1A2D', '#64172A', '#761F33'];
 const YEAR = 2026;
 
@@ -127,17 +140,50 @@ function showToast(text) {
   toastTimer = setTimeout(() => { t.hidden = true; }, 2200);
 }
 
+let cleanup = null;
+const PLACEHOLDER = $('game-area').innerHTML;
+
 function openGame(n) {
   $('game-date').textContent = `Luke ${n} · ${n}. desember`;
   $('game-day').textContent = n;
   $('game-name').textContent = GAMES[n];
+
+  const area = $('game-area');
+  const puzzle = PUZZLES[n];
+  const game = puzzle && window.Games && window.Games[puzzle.type];
+  if (cleanup) { cleanup(); cleanup = null; }
+  $('game').classList.toggle('compact', !!game);
+  if (game) {
+    area.className = 'game-area playing';
+    cleanup = game.mount(area, puzzle, n, () => showReward(n));
+  } else {
+    area.className = 'game-area';
+    area.innerHTML = PLACEHOLDER;
+  }
+
   $('home').hidden = true;
   $('game').hidden = false;
   window.scrollTo(0, 0);
 }
 
+function showReward(n) {
+  const r = REWARDS[n];
+  if (!r) return;
+  const card = document.createElement('div');
+  card.className = 'reward';
+  card.innerHTML = `
+    <svg class="reward-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 6.9L22 9.3l-5.8 4.6L18.2 21 12 17l-6.2 4 2-7.1L2 9.3l7.4-.4z"/></svg>
+    <p class="reward-title"></p>
+    <p class="reward-text"></p>`;
+  card.querySelector('.reward-title').textContent = r.title;
+  card.querySelector('.reward-text').textContent = r.text;
+  $('game-area').append(card);
+  setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+}
+
 function showHome() {
   busy = false;
+  if (cleanup) { cleanup(); cleanup = null; }
   $('game').hidden = true;
   $('home').hidden = false;
   buildGrid();
