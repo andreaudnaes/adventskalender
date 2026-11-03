@@ -83,17 +83,20 @@ window.Games.pyralinks = (function () {
     const checkBtn = root.querySelector('.py-check');
     const failEl = root.querySelector('.py-fail');
 
-    // Brikker (en per plass)
-    const tiles = [];
-    for (let k = 0; k < SIZE; k++) {
+    // Brikker: én per orddel. Hver brikke flytter seg mellom plassene,
+    // slik at et bytte vises som at brikkene glir forbi hverandre.
+    const tileOf = {};
+    sol.forEach((w) => {
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'py-tile';
-      b.dataset.k = k;
-      b.dataset.level = level(k);
+      b.textContent = w;
       board.append(b);
-      tiles.push(b);
-    }
+      tileOf[w] = b;
+    });
+    const tileAt = (k) => tileOf[order[k]];
+    let pos = [];
+    const TILE_H = 40;
     // Linjer (en per kobling, fra plass k til forelderen)
     const lines = [];
     for (let k = 1; k < SIZE; k++) {
@@ -110,7 +113,7 @@ window.Games.pyralinks = (function () {
       const H = levels * tileH + (levels - 1) * rowGap;
       board.style.height = `${H}px`;
       svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-      const pos = [];
+      pos = [];
       for (let k = 0; k < SIZE; k++) {
         const L = level(k);
         const j = k - (2 ** L - 1);
@@ -119,12 +122,11 @@ window.Games.pyralinks = (function () {
         const w = Math.min(slot - 4, 96);
         const top = L * (tileH + rowGap);
         pos[k] = { cx, top, w };
-        const t = tiles[k];
-        t.style.width = `${w}px`;
-        t.style.height = `${tileH}px`;
-        t.style.left = `${cx - w / 2}px`;
-        t.style.top = `${top}px`;
       }
+      board.classList.add('no-anim');
+      placeTiles();
+      void board.offsetWidth;
+      board.classList.remove('no-anim');
       for (let k = 1; k < SIZE; k++) {
         const p = pos[Math.floor((k - 1) / 2)], c = pos[k];
         const y1 = p.top + tileH, y2 = c.top;
@@ -141,12 +143,27 @@ window.Games.pyralinks = (function () {
 
     let selected = -1;
 
+    function placeTiles() {
+      if (!pos.length) return;
+      order.forEach((w, k) => {
+        const t = tileOf[w];
+        const p = pos[k];
+        t.dataset.k = k;
+        t.dataset.level = level(k);
+        t.style.width = `${p.w}px`;
+        t.style.height = `${TILE_H}px`;
+        t.style.left = `${p.cx - p.w / 2}px`;
+        t.style.top = `${p.top}px`;
+      });
+    }
+
     function draw() {
-      tiles.forEach((t, k) => {
-        t.textContent = order[k];
+      placeTiles();
+      order.forEach((w, k) => {
+        const t = tileOf[w];
         t.classList.toggle('locked', isLocked(k));
         t.classList.toggle('selected', k === selected);
-        t.setAttribute('aria-label', `${order[k]}${isLocked(k) ? ', låst' : ''}`);
+        t.setAttribute('aria-label', `${w}${isLocked(k) ? ', låst' : ''}`);
       });
       for (let k = 1; k < SIZE; k++) {
         lines[k].setAttribute('class', locked.includes(k) ? 'ok' : (wrong.includes(k) ? 'bad' : ''));
@@ -178,21 +195,71 @@ window.Games.pyralinks = (function () {
       swap(selected, k);
     }
 
-    // Trykk for å velge, trykk igjen for å bytte. Eller dra en brikke over en annen.
-    let downK = -1;
+    // Trykk for å velge og trykk igjen for å bytte,
+    // eller løft en brikke og slipp den oppå en annen.
+    let drag = null;
+    const slotUnder = (x, y, except) => {
+      for (let k = 0; k < SIZE; k++) {
+        const t = tileAt(k);
+        if (t === except) continue;
+        const r = t.getBoundingClientRect();
+        if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) return k;
+      }
+      return -1;
+    };
+    const clearTarget = () => board.querySelectorAll('.py-tile.target').forEach((t) => t.classList.remove('target'));
+
     board.addEventListener('pointerdown', (e) => {
       const t = e.target.closest('.py-tile');
-      downK = t ? +t.dataset.k : -1;
+      if (!t || solved || tries <= 0) return;
+      const k = +t.dataset.k;
+      drag = { k, t, x: e.clientX, y: e.clientY, moved: false, target: -1, locked: isLocked(k) };
+      if (!drag.locked) t.setPointerCapture(e.pointerId);
     });
-    board.addEventListener('pointerup', (e) => {
-      if (downK < 0) return;
-      const el = document.elementFromPoint(e.clientX, e.clientY);
-      const t = el && el.closest('.py-tile');
-      const upK = t ? +t.dataset.k : -1;
-      if (upK >= 0 && upK !== downK && !solved && tries > 0) swap(downK, upK);
-      else if (upK === downK) tap(downK);
-      downK = -1;
+
+    board.addEventListener('pointermove', (e) => {
+      if (!drag || drag.locked) return;
+      const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+      if (!drag.moved && Math.hypot(dx, dy) < 6) return;
+      if (!drag.moved) {
+        drag.moved = true;
+        selected = -1;
+        draw();
+        drag.t.classList.add('dragging');
+      }
+      e.preventDefault();
+      drag.t.style.transform = `translate(${dx}px, ${dy}px) scale(1.1)`;
+      const k = slotUnder(e.clientX, e.clientY, drag.t);
+      const target = k >= 0 && !isLocked(k) ? k : -1;
+      if (target !== drag.target) {
+        clearTarget();
+        if (target >= 0) tileAt(target).classList.add('target');
+        drag.target = target;
+      }
     });
+
+    const endDrag = (e) => {
+      if (!drag) return;
+      const d = drag;
+      drag = null;
+      clearTarget();
+      if (!d.moved) { tap(d.k); return; }
+      // Slipp: la brikken gli fra der den ble sluppet til sin nye plass
+      const r0 = d.t.getBoundingClientRect();
+      d.t.classList.add('dropping');          // ingen animasjon mens vi flytter den
+      d.t.classList.remove('dragging');
+      d.t.style.transform = '';
+      if (d.target >= 0 && e.type === 'pointerup') swap(d.k, d.target);
+      else draw();
+      const r1 = d.t.getBoundingClientRect();  // den nye plassen
+      const sx = r0.width / r1.width;
+      d.t.style.transform = `translate(${r0.left - r1.left + (r0.width - r1.width) / 2}px, ${r0.top - r1.top + (r0.height - r1.height) / 2}px) scale(${sx})`;
+      void d.t.offsetWidth;
+      d.t.classList.remove('dropping');       // gli fra slippunktet til plassen
+      d.t.style.transform = '';
+    };
+    board.addEventListener('pointerup', endDrag);
+    board.addEventListener('pointercancel', endDrag);
 
     checkBtn.addEventListener('click', () => {
       if (solved || tries <= 0) return;
