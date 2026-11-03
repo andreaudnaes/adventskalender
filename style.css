@@ -642,12 +642,19 @@ html, body {
 }
 
 /* ---------- Kun i testmodus ---------- */
-.test-reset {
-  all: unset;
+.test-bar {
   position: fixed;
   top: calc(6px + env(safe-area-inset-top));
   right: 8px;
   z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+.test-btn[hidden] { display: none; }
+.test-btn {
+  all: unset;
   padding: 8px 12px;
   border: 1px dashed rgba(243,230,211,.6);
   border-radius: 999px;
@@ -658,4 +665,4 @@ html, body {
   color: var(--cream);
   cursor: pointer;
 }
-.test-reset:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.test-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }

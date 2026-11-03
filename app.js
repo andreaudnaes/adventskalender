@@ -30,7 +30,8 @@ const PUZZLES = {
   2: {
     type: 'zip',
     size: 6,
-    numbers: [[5, 3, 1], [4, 1, 2], [1, 4, 3], [3, 1, 4], [2, 2, 5], [1, 2, 6], [1, 0, 7]]
+    numbers: [[5, 3, 1], [4, 1, 2], [1, 4, 3], [3, 1, 4], [2, 2, 5], [1, 2, 6], [1, 0, 7]],
+    solution: 'WzMzLCAzMiwgMzEsIDMwLCAyNCwgMjUsIDI2LCAyNywgMjgsIDM0LCAzNSwgMjksIDIzLCAxNywgMTEsIDUsIDQsIDEwLCAxNiwgMjIsIDIxLCAyMCwgMTksIDE4LCAxMiwgMTMsIDE0LCAxNSwgOSwgMywgMiwgOCwgNywgMSwgMCwgNl0=' // kun for testknappen
   },
   4: {
     type: 'pyralinks',
@@ -242,34 +243,58 @@ $('back').addEventListener('click', () => {
 window.addEventListener('hashchange', route);
 
 // -------------------------------------------------------------
-//  Kun for testing: knapp for å starte på nytt.
+//  Kun for testing: knapper for å starte på nytt og vise løsningen.
 //  Vises bare når TEST_MODE er på og adressen har ?test=
 //  Forsvinner automatisk når TEST_MODE settes til false.
 // -------------------------------------------------------------
 if (TEST_MODE && new URLSearchParams(location.search).has('test')) {
-  const btn = document.createElement('button');
-  btn.type = 'button';
-  btn.className = 'test-reset';
-  document.body.append(btn);
+  const bar = document.createElement('div');
+  bar.className = 'test-bar';
+  const reset = document.createElement('button');
+  reset.type = 'button';
+  reset.className = 'test-btn';
+  const solve = document.createElement('button');
+  solve.type = 'button';
+  solve.className = 'test-btn';
+  solve.textContent = 'Test: vis løsning';
+  bar.append(solve, reset);
+  document.body.append(bar);
 
-  const label = () => {
+  const currentDay = () => {
     const m = location.hash.match(/^#luke-(\d+)$/);
-    btn.textContent = m ? `Test: start luke ${m[1]} på nytt` : 'Test: nullstill alle luker';
+    return m ? parseInt(m[1], 10) : 0;
   };
 
-  btn.addEventListener('click', () => {
-    const m = location.hash.match(/^#luke-(\d+)$/);
+  const label = () => {
+    const n = currentDay();
+    reset.textContent = n ? `Test: start luke ${n} på nytt` : 'Test: nullstill alle luker';
+    const p = n && PUZZLES[n];
+    const g = p && window.Games && window.Games[p.type];
+    solve.hidden = !(g && g.solvedState);
+  };
+
+  reset.addEventListener('click', () => {
+    const n = currentDay();
     try {
-      if (m) {
-        localStorage.removeItem(`advent-${m[1]}`);
+      if (n) {
+        localStorage.removeItem(`advent-${n}`);
       } else {
         Object.keys(localStorage)
           .filter((k) => k.startsWith('advent-'))
           .forEach((k) => localStorage.removeItem(k));
       }
     } catch (e) { /* ignorer */ }
-    if (m) openGame(parseInt(m[1], 10));
+    if (n) openGame(n);
     else showToast('Alle luker er nullstilt');
+  });
+
+  solve.addEventListener('click', () => {
+    const n = currentDay();
+    const p = PUZZLES[n];
+    const g = p && window.Games[p.type];
+    if (!g || !g.solvedState) return;
+    try { localStorage.setItem(`advent-${n}`, JSON.stringify(g.solvedState(p))); } catch (e) { /* ignorer */ }
+    openGame(n);
   });
 
   window.addEventListener('hashchange', label);

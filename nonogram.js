@@ -307,5 +307,15 @@ window.Games.nonogram = (function () {
     };
   }
 
-  return { mount };
+  // Kun for testing: lagret tilstand som om bildet er løst
+  const solvedState = (puzzle) => {
+    const pic = decode(puzzle.data);
+    return {
+      state: pic.map((r) => r.split('').map((ch) => (ch === '.' ? 2 : 1))),
+      lives: LIVES,
+      solved: true
+    };
+  };
+
+  return { mount, solvedState };
 })();

@@ -237,5 +237,11 @@ window.Games.pyralinks = (function () {
     return () => ro.disconnect();
   }
 
-  return { mount };
+  // Kun for testing: lagret tilstand som om pyramiden er løst
+  const solvedState = (puzzle) => {
+    const sol = decode(puzzle.data);
+    return { order: sol, locked: sol.map((_, k) => k).slice(1), tries: TRIES, solved: true };
+  };
+
+  return { mount, solvedState };
 })();

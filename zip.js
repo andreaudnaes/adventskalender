@@ -180,5 +180,8 @@ window.Games.zip = (function () {
     };
   }
 
-  return { mount };
+  // Kun for testing: lagret tilstand som om linjen er tegnet ferdig
+  const solvedState = (puzzle) => ({ path: JSON.parse(atob(puzzle.solution)), solved: true });
+
+  return { mount, solvedState };
 })();

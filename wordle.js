@@ -202,5 +202,8 @@ window.Games.ordgjetting = (function () {
     return () => document.removeEventListener('keydown', onKey);
   }
 
-  return { mount };
+  // Kun for testing: lagret tilstand som om ordet er løst
+  const solvedState = (puzzle) => ({ guesses: [decode(puzzle.answer).toUpperCase()] });
+
+  return { mount, solvedState };
 })();
