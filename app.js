@@ -26,7 +26,21 @@ const LAYOUT = [
 
 // Innholdet i hver luke. Svarene er kodet (base64) så de ikke står i klartekst.
 const PUZZLES = {
-  1: { type: 'ordgjetting', answer: 'S0FLQU8=' }
+  1: { type: 'ordgjetting', answer: 'S0FLQU8=' },
+  5: {
+    type: 'nonogram',
+    data: 'WyIuVS4uLi4uLi4uLi4uUlIiLCAiVVVVLi4uLi4uLi4uUlJMIiwgIi5VLi5ISC4uLi4uUlIuTCIsICIuLi5ISEhILi4uUlIuLkwiLCAiLi4uLkZGLi4uUlIuLi5MIiwgIi4uLi5GQi4uUlIuLi4uTCIsICIuLi5CQkJCUlIuLi4uLkwiLCAiLi5CQkJCLi4uLi4uLi5MIiwgIi4uLkJCQi4uLi4uLi4uTCIsICJXV1dXV1dXV1dXV1dXLkwiLCAiLlcuV1dXV1dXVy5XLi5MIiwgIi4uV1dXV1dXV1dXLi4uTCIsICJTUy4uU1NTLi5TUy4uTC4iLCAiLlNTUy4uLlNTUy5TUy5TIiwgIlNTU1NTU1NTU1NTU1NTUyJd',
+    colors: {
+      U: '#F6D27A', // sol
+      H: '#E3B341', // sydvest
+      F: '#F0C9A0', // ansikt
+      B: '#D99A2B', // regnjakke
+      R: '#8B5A2B', // fiskestang
+      L: '#F3E6D3', // snøre
+      W: '#B5713A', // båt
+      S: '#3E7CB1'  // sjø
+    }
+  }
 };
 
 // Belønningen som vises når luken er løst
@@ -34,6 +48,10 @@ const REWARDS = {
   1: {
     title: 'En liten hilsen',
     text: '[Skriv meldingen din til luke 1 her]'
+  },
+  5: {
+    title: 'En liten hilsen',
+    text: '[Skriv meldingen din til luke 5 her]'
   }
 };
 

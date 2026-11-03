@@ -338,13 +338,132 @@ html, body {
   text-align: center;
   animation: fadein .6s ease-out both;
 }
-.reward-star { width: 20px; height: 20px; fill: var(--gold); }
+.game-area .reward-star { width: 22px; height: 22px; fill: var(--gold); stroke: none; }
 .reward-title { margin: 0; font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 26px; color: var(--cream); }
 .reward-text { margin: 0; font-size: 15px; line-height: 1.55; color: var(--cream-soft); white-space: pre-line; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ---------- Nonogram ---------- */
+.game.compact:has(.ng) { padding-left: 12px; padding-right: 12px; }
+
+.ng {
+  --cell: min(26px, calc((min(100vw, 480px) - 24px - 60px) / 15));
+  position: relative;
+  width: 100%;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+
+.ng-top { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0 4px; }
+.ng-top.done .ng-mode { visibility: hidden; }
+.ng-lives { display: flex; gap: 6px; }
+.ng-heart svg { width: 22px; height: 22px; fill: #E46A8C; transition: fill .3s, transform .3s; }
+.ng-heart.lost svg { fill: rgba(243,230,211,.15); transform: scale(.85); }
+
+.ng-mode { display: flex; padding: 3px; border-radius: 999px; background: #2A0710; box-shadow: inset 0 0 0 1px rgba(214,174,104,.3); }
+.ng-tool {
+  all: unset;
+  display: inline-flex; align-items: center; gap: 7px;
+  min-height: 38px; padding: 0 14px;
+  border-radius: 999px;
+  font-size: 14px; font-weight: 500; color: var(--cream-soft);
+  cursor: pointer;
+}
+.ng-tool.active { background: var(--gold); color: #2A0710; }
+.ng-tool:focus-visible { outline: 2px solid var(--cream); outline-offset: 2px; }
+.ng-swatch { width: 12px; height: 12px; border-radius: 2px; background: currentColor; }
+.ng-x { font-size: 12px; line-height: 1; }
+
+.ng-wrap { max-width: 100%; overflow-x: auto; }
+.ng-board {
+  display: grid;
+  grid-template-columns: auto calc(var(--cell) * var(--n));
+  grid-template-rows: auto calc(var(--cell) * var(--n));
+}
+.ng-board.shake { animation: shake .4s ease-in-out; }
+
+.ng-colclues { display: grid; grid-template-columns: repeat(var(--n), var(--cell)); align-items: end; }
+.ng-rowclues { display: grid; grid-template-rows: repeat(var(--n), var(--cell)); justify-items: end; }
+
+.ng-cc, .ng-rc {
+  display: flex;
+  font-size: 11px; font-weight: 600; line-height: 1;
+  color: var(--cream);
+  transition: opacity .3s;
+}
+.ng-cc { flex-direction: column; align-items: center; gap: 3px; padding-bottom: 5px; }
+.ng-rc { align-items: center; gap: 5px; padding-right: 6px; }
+.ng-cc:nth-child(odd) span, .ng-rc:nth-child(odd) span { color: var(--gold-soft); }
+.ng-cc.done, .ng-rc.done { opacity: .3; }
+
+.ng-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--n), var(--cell));
+  grid-template-rows: repeat(var(--n), var(--cell));
+  border: 1.5px solid var(--gold);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  background: #2A0710;
+}
+
+.ng-cell {
+  position: relative;
+  border-right: 1px solid rgba(243,230,211,.12);
+  border-bottom: 1px solid rgba(243,230,211,.12);
+  cursor: pointer;
+  transition: background .15s;
+}
+.ng-cell.edge-r { border-right: 1.5px solid rgba(214,174,104,.65); }
+.ng-cell.edge-b { border-bottom: 1.5px solid rgba(214,174,104,.65); }
+
+.ng-cell[data-v="1"] { background: var(--gold); }
+.ng-cell[data-v="2"]::after, .ng-cell[data-v="3"]::after {
+  content: '✕';
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: calc(var(--cell) * .55);
+  color: rgba(243,230,211,.4);
+}
+.ng-cell[data-v="3"] { background: rgba(228,106,140,.25); }
+.ng-cell[data-v="3"]::after { color: #F07A9A; font-weight: 700; }
+.ng-cell.oops { animation: oops .5s ease; }
+@keyframes oops { 0% { box-shadow: inset 0 0 0 30px rgba(240,122,154,.8); } 100% { box-shadow: inset 0 0 0 30px rgba(240,122,154,0); } }
+
+.ng-board.solved .ng-grid { border-color: transparent; }
+.ng-board.solved .ng-cell { border-color: transparent; transition: background .5s; }
+.ng-board.solved .ng-cell[data-v="blank"] { background: #2A0710; }
+.ng-board.solved .ng-cell[data-v="blank"]::after { content: none; }
+.ng-board.solved .ng-colclues, .ng-board.solved .ng-rowclues, .ng-board.solved .ng-corner { display: none; }
+.ng-board.solved { grid-template-columns: calc(var(--cell) * var(--n)); grid-template-rows: calc(var(--cell) * var(--n)); }
+
+.ng-msg { margin: 0; min-height: 20px; font-size: 15px; font-weight: 500; color: var(--gold-soft); text-align: center; }
+
+.ng-fail {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(280px, 90%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 22px 20px;
+  border: 1px solid var(--gold); border-radius: 12px;
+  background: #4B0F1E;
+  box-shadow: 0 12px 40px rgba(0,0,0,.5);
+  text-align: center;
+  animation: fadein .4s ease-out both;
+}
+.ng-fail[hidden] { display: none; }
+.ng-fail-title { margin: 0; font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 26px; }
+.ng-fail-text { margin: 0; font-size: 14px; color: var(--cream-soft); }
+.ng-retry {
+  all: unset; cursor: pointer;
+  margin-top: 6px; min-height: 44px; padding: 0 22px;
+  display: inline-flex; align-items: center;
+  border-radius: 999px; background: var(--gold); color: #2A0710;
+  font-size: 15px; font-weight: 600;
+}
+.ng-retry:focus-visible { outline: 2px solid var(--cream); outline-offset: 2px; }
 
 /* ---------- Kun i testmodus ---------- */
 .test-reset {
