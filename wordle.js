@@ -160,6 +160,8 @@ window.Games.ordgjetting = (function () {
       if (k === 'BACK') { current = current.slice(0, -1); drawCurrent(); say(''); return; }
       if (k === 'ENTER') {
         if (current.length < LENGTH) { shakeRow(); say('For få bokstaver'); return; }
+        const valid = current === answer || !window.WORDS5 || window.WORDS5.has(current);
+        if (!valid) { shakeRow(); say('Ikke i ordlisten'); return; }
         const guess = current;
         const r = guesses.length;
         guesses.push(guess);

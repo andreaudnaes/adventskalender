@@ -284,8 +284,8 @@ html, body {
 .wg-tile.flip { animation: flip .5s ease-in-out; }
 @keyframes flip { 0% { transform: rotateX(0); } 50% { transform: rotateX(90deg); } 100% { transform: rotateX(0); } }
 
-.wg-tile[data-state="correct"] { background: var(--gold); border-color: var(--gold); color: #3A0B17; }
-.wg-tile[data-state="present"] { background: #A3506A; border-color: #A3506A; color: #FFF6EA; }
+.wg-tile[data-state="correct"] { background: #C99A4B; border-color: #C99A4B; color: #2A0710; }
+.wg-tile[data-state="present"] { background: #F0B3C4; border-color: #F0B3C4; color: #4B0F1E; }
 .wg-tile[data-state="absent"]  { background: #2A0710; border-color: #2A0710; color: rgba(243,230,211,.7); }
 
 .wg-row.win .wg-tile { animation: bounce .6s ease; }
@@ -323,8 +323,8 @@ html, body {
 .wg-key:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 .wg-key.wide { flex: 1.6 1 0; max-width: 64px; font-size: 13px; }
 .wg-key svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; stroke-linecap: round; }
-.wg-key[data-state="correct"] { background: var(--gold); color: #3A0B17; box-shadow: none; }
-.wg-key[data-state="present"] { background: #A3506A; color: #FFF6EA; box-shadow: none; }
+.wg-key[data-state="correct"] { background: #C99A4B; color: #2A0710; box-shadow: none; }
+.wg-key[data-state="present"] { background: #F0B3C4; color: #4B0F1E; box-shadow: none; }
 .wg-key[data-state="absent"]  { background: #2A0710; color: rgba(243,230,211,.45); box-shadow: none; }
 
 /* ---------- Belønning ---------- */
