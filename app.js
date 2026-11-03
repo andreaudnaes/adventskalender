@@ -29,9 +29,9 @@ const PUZZLES = {
   1: { type: 'ordgjetting', answer: 'S0FLQU8=' },
   2: {
     type: 'zip',
-    size: 6,
-    numbers: [[5, 3, 1], [4, 1, 2], [1, 4, 3], [3, 1, 4], [2, 2, 5], [1, 2, 6], [1, 0, 7]],
-    solution: 'WzMzLCAzMiwgMzEsIDMwLCAyNCwgMjUsIDI2LCAyNywgMjgsIDM0LCAzNSwgMjksIDIzLCAxNywgMTEsIDUsIDQsIDEwLCAxNiwgMjIsIDIxLCAyMCwgMTksIDE4LCAxMiwgMTMsIDE0LCAxNSwgOSwgMywgMiwgOCwgNywgMSwgMCwgNl0=' // kun for testknappen
+    size: 8,
+    numbers: [[2, 1, 1], [4, 7, 2], [0, 1, 3], [1, 6, 4], [4, 1, 5], [5, 2, 6], [6, 1, 7], [5, 6, 8], [4, 3, 9], [5, 4, 10], [4, 5, 11], [5, 5, 12]],
+    solution: 'WzE3LCAxNiwgMjQsIDMyLCA0MCwgNDgsIDU2LCA1NywgNTgsIDU5LCA2MCwgNjEsIDYyLCA2MywgNTUsIDQ3LCAzOSwgMzEsIDIzLCAxNSwgNywgNiwgNSwgNCwgMywgMiwgMSwgMCwgOCwgOSwgMTAsIDExLCAxMiwgMTMsIDE0LCAyMiwgMjEsIDIwLCAxOSwgMTgsIDI2LCAyNSwgMzMsIDM0LCA0MiwgNDEsIDQ5LCA1MCwgNTEsIDUyLCA1MywgNTQsIDQ2LCAzOCwgMzAsIDI5LCAyOCwgMjcsIDM1LCA0MywgNDQsIDM2LCAzNywgNDVd' // kun for testknappen
   },
   4: {
     type: 'pyralinks',

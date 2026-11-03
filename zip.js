@@ -16,7 +16,7 @@ window.Games.zip = (function () {
     let solved = false;
     try {
       const s = JSON.parse(localStorage.getItem(storeKey));
-      if (s && Array.isArray(s.path)) { path = s.path; solved = !!s.solved; }
+      if (s && Array.isArray(s.path) && s.path.every((i) => i >= 0 && i < N * N) && (s.path.length === 0 || s.path[0] === startCell)) { path = s.path; solved = !!s.solved; }
     } catch (e) { /* ignorer */ }
     const save = () => {
       try { localStorage.setItem(storeKey, JSON.stringify({ path, solved })); } catch (e) { /* ignorer */ }
