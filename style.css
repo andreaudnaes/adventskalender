@@ -560,6 +560,87 @@ html, body {
 .zp-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .zp-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 
+/* ---------- Pyralinks ---------- */
+.game.compact:has(.py) { padding-left: 12px; padding-right: 12px; }
+.py { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.py-help { margin: 0; max-width: 300px; font-size: 13px; line-height: 1.45; color: var(--cream-soft); text-align: center; }
+
+.py-board { position: relative; width: 100%; max-width: 456px; touch-action: manipulation; }
+.py-lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.py-lines path { fill: none; stroke: rgba(214,174,104,.35); stroke-width: 2; transition: stroke .3s; }
+.py-lines path.ok { stroke: #E46A8C; stroke-width: 3; }
+.py-lines path.bad { stroke: rgba(243,230,211,.35); stroke-dasharray: 4 4; }
+
+.py-tile {
+  all: unset;
+  position: absolute;
+  box-sizing: border-box;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 2px;
+  border-radius: 7px;
+  background: #6E1A2D;
+  box-shadow: inset 0 0 0 1px rgba(214,174,104,.55), 0 2px 5px rgba(0,0,0,.3);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -.2px;
+  color: var(--cream);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: left .25s ease, top .25s ease, background .2s, transform .15s, box-shadow .2s;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.py-tile[data-level="0"], .py-tile[data-level="1"] { font-size: 15px; }
+.py-tile[data-level="3"] { font-size: 12px; }
+.py-tile:focus-visible { outline: 2px solid var(--cream); outline-offset: 2px; }
+.py-tile.selected { background: var(--gold); color: #2A0710; transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,.4); }
+.py-tile.locked { background: #B24F75; color: #FFF6EA; box-shadow: none; cursor: default; }
+
+.py-board.solved .py-tile { animation: bounce .6s ease; }
+
+.py-msg { margin: 0; min-height: 20px; font-size: 14px; font-weight: 500; color: var(--gold-soft); text-align: center; }
+
+.py-bottom { width: 100%; max-width: 456px; display: flex; justify-content: space-between; align-items: center; }
+.py-bottom.done { display: none; }
+.py-tries { display: flex; gap: 6px; }
+.py-try { width: 12px; height: 12px; border-radius: 50%; background: var(--gold); transition: background .3s; }
+.py-try.used { background: rgba(243,230,211,.15); }
+.py-check {
+  all: unset; cursor: pointer;
+  min-height: 44px; padding: 0 26px;
+  display: inline-flex; align-items: center;
+  border-radius: 999px; background: var(--gold); color: #2A0710;
+  font-size: 15px; font-weight: 600;
+}
+.py-check:focus-visible { outline: 2px solid var(--cream); outline-offset: 2px; }
+
+.py-fail {
+  position: absolute; left: 50%; top: 40%;
+  transform: translate(-50%, -50%);
+  width: min(280px, 90%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 22px 20px;
+  border: 1px solid var(--gold); border-radius: 12px;
+  background: #4B0F1E;
+  box-shadow: 0 12px 40px rgba(0,0,0,.5);
+  text-align: center;
+  animation: fadein .4s ease-out both;
+  z-index: 5;
+}
+.py-fail[hidden] { display: none; }
+.py-fail-title { margin: 0; font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 26px; }
+.py-fail-text { margin: 0; font-size: 14px; color: var(--cream-soft); }
+.py-retry {
+  all: unset; cursor: pointer;
+  margin-top: 6px; min-height: 44px; padding: 0 22px;
+  display: inline-flex; align-items: center;
+  border-radius: 999px; background: var(--gold); color: #2A0710;
+  font-size: 15px; font-weight: 600;
+}
+
 /* ---------- Kun i testmodus ---------- */
 .test-reset {
   all: unset;

@@ -4,11 +4,11 @@
 
 // Hvilket spill som ligger bak hver luke
 const GAMES = {
-  1: 'Ordgjetting', 2: 'Zip', 3: 'Connies', 4: 'Emoji-gåte',
+  1: 'Ordgjetting', 2: 'Zip', 3: 'Connies', 4: 'Pyralinks',
   5: 'Nonogram', 6: 'Ordjakt', 7: 'Bikuben', 8: 'Sudoku',
-  9: 'Ordgjetting', 10: 'Zip', 11: 'Emoji-gåte', 12: 'Connies',
+  9: 'Ordgjetting', 10: 'Zip', 11: 'Pyralinks', 12: 'Connies',
   13: 'Stort nonogram', 14: 'Ordjakt', 15: 'Sudoku', 16: 'Bikuben',
-  17: 'Emoji-gåte', 18: 'Ordgjetting', 19: 'Zip', 20: 'Dobbel runde: Connies',
+  17: 'Pyralinks', 18: 'Ordgjetting', 19: 'Zip', 20: 'Dobbel runde: Connies',
   21: 'Nonogram', 22: 'Sudoku', 23: 'Ordjakt', 24: 'Finalen'
 };
 
@@ -31,6 +31,10 @@ const PUZZLES = {
     type: 'zip',
     size: 6,
     numbers: [[5, 3, 1], [4, 1, 2], [1, 4, 3], [3, 1, 4], [2, 2, 5], [1, 2, 6], [1, 0, 7]]
+  },
+  4: {
+    type: 'pyralinks',
+    data: 'WyJqdWxlIiwgImJvcmQiLCAidHJlIiwgInNrcml2ZSIsICJ0ZW5uaXMiLCAia2FudCIsICJza28iLCAiZmVpbCIsICJib2siLCAiYmFuZSIsICJyYWNrZXQiLCAiaW5lIiwgInN0ZWluIiwgImxlIiwgImxpc3NlIl0='
   },
   5: {
     type: 'nonogram',
@@ -57,6 +61,10 @@ const REWARDS = {
   2: {
     title: 'En liten hilsen',
     text: '[Skriv meldingen din til luke 2 her]'
+  },
+  4: {
+    title: 'En liten hilsen',
+    text: '[Skriv meldingen din til luke 4 her]'
   },
   5: {
     title: 'Du klarte det \u2665\uFE0E',
