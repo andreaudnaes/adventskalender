@@ -243,7 +243,7 @@ html, body {
   padding: 24px;
   text-align: center;
 }
-.game-area svg { width: 28px; height: 28px; fill: none; stroke: var(--gold); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.game-area > svg { width: 28px; height: 28px; fill: none; stroke: var(--gold); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .game-area-title { margin: 0; font-size: 16px; font-weight: 500; }
 .game-area-text { margin: 0; font-size: 13px; line-height: 1.5; color: var(--cream-soft); max-width: 240px; }
 
@@ -474,6 +474,91 @@ html, body {
   font-size: 15px; font-weight: 600;
 }
 .ng-retry:focus-visible { outline: 2px solid var(--cream); outline-offset: 2px; }
+
+/* ---------- Zip ---------- */
+.zp {
+  --cell: min(56px, calc((min(100vw, 480px) - 40px) / var(--n)));
+  width: 100%;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+.zp-help { margin: 0; font-size: 13px; color: var(--cream-soft); text-align: center; }
+
+.zp-board {
+  position: relative;
+  width: calc(var(--cell) * var(--n));
+  height: calc(var(--cell) * var(--n));
+  border: 1.5px solid var(--gold);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #2A0710;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+}
+.zp-grid, .zp-nums {
+  position: absolute; inset: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--n), 1fr);
+  grid-template-rows: repeat(var(--n), 1fr);
+}
+.zp-cell {
+  border-right: 1px solid rgba(243,230,211,.1);
+  border-bottom: 1px solid rgba(243,230,211,.1);
+  transition: background .2s;
+}
+.zp-cell.on { background: rgba(214,174,104,.14); }
+
+.zp-line { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.zp-line polyline {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: .36;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.zp-nums { pointer-events: none; }
+.zp-dot {
+  align-self: center; justify-self: center;
+  width: calc(var(--cell) * .62); height: calc(var(--cell) * .62);
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: #4B0F1E;
+  border: 2px solid var(--gold);
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: calc(var(--cell) * .38);
+  color: var(--gold);
+  position: relative;
+  z-index: 1;
+  transition: background .2s, color .2s;
+}
+.zp-dot.on { background: var(--gold); color: #2A0710; }
+.zp-dot.nope { animation: shake .4s ease-in-out; }
+
+.zp-board.solved { animation: glow 1.2s ease-out; }
+.zp-board.solved .zp-cell.on { background: rgba(214,174,104,.28); }
+@keyframes glow {
+  0% { box-shadow: 0 0 0 0 rgba(232,196,120,.7); }
+  100% { box-shadow: 0 0 0 18px rgba(232,196,120,0); }
+}
+
+.zp-msg { margin: 0; min-height: 20px; font-size: 14px; font-weight: 500; color: var(--gold-soft); text-align: center; }
+
+.zp-actions { display: flex; gap: 10px; }
+.zp-actions.done { display: none; }
+.zp-btn {
+  all: unset; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 7px;
+  min-height: 42px; padding: 0 16px;
+  border-radius: 999px;
+  background: #2A0710;
+  box-shadow: inset 0 0 0 1px rgba(214,174,104,.35);
+  font-size: 14px; font-weight: 500; color: var(--cream);
+}
+.zp-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.zp-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 
 /* ---------- Kun i testmodus ---------- */
 .test-reset {
