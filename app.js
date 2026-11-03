@@ -34,7 +34,7 @@ const PUZZLES = {
   },
   4: {
     type: 'pyralinks',
-    data: 'WyJqdWxlIiwgImJvcmQiLCAidHJlIiwgInNrcml2ZSIsICJ0ZW5uaXMiLCAia2FudCIsICJza28iLCAiZmVpbCIsICJib2siLCAiYmFuZSIsICJyYWNrZXQiLCAiaW5lIiwgInN0ZWluIiwgImxlIiwgImxpc3NlIl0='
+    data: 'WyJqdWxlIiwgImJvcmQiLCAidHJlIiwgImthbnQiLCAidGVubmlzIiwgIm5lciIsICJza28iLCAiaW5lIiwgInN0ZWluIiwgImJhbGwiLCAiYmFuZSIsICJkIiwgInbDuHMiLCAibGUiLCAibGlzc2UiXQ=='
   },
   5: {
     type: 'nonogram',

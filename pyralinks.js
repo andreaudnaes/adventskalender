@@ -1,6 +1,6 @@
 // =============================================================
 //  Pyralinks: en pyramide (1-2-4-8) der hver brikke danner et ord
-//  sammen med brikken over seg. Bytt plass på brikkene til alt stemmer.
+//  sammen med brikken over seg (øverste del først). Bytt plass på brikkene til alt stemmer.
 //  Løsningen lagres kodet (base64), i "heap"-rekkefølge:
 //  plass 0 er toppen, barna til plass i er 2i+1 og 2i+2.
 // =============================================================
@@ -50,7 +50,7 @@ window.Games.pyralinks = (function () {
     fresh();
     try {
       const s = JSON.parse(localStorage.getItem(storeKey));
-      if (s && Array.isArray(s.order) && s.order.length === SIZE) {
+      if (s && Array.isArray(s.order) && s.order.slice().sort().join() === sol.slice().sort().join()) {
         order = s.order; locked = s.locked || []; tries = s.tries; solved = !!s.solved;
       }
     } catch (e) { /* ignorer */ }
@@ -60,7 +60,7 @@ window.Games.pyralinks = (function () {
 
     root.innerHTML = `
       <div class="py">
-        <p class="py-help">Bytt plass på brikkene. Hver brikke skal danne et ord med brikken over seg, i valgfri rekkefølge.</p>
+        <p class="py-help">Bytt plass på brikkene. Hver brikke danner et ord med brikken over seg: den øverste kommer først.</p>
         <div class="py-board">
           <svg class="py-lines" aria-hidden="true"></svg>
         </div>
