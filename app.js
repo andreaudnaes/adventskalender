@@ -50,7 +50,7 @@ const REWARDS = {
     text: '[Skriv meldingen din til luke 1 her]'
   },
   5: {
-    title: 'En liten hilsen',
+    title: 'Du klarte det \u2665\uFE0E',
     text: 'Knut på fisketur'
   }
 };

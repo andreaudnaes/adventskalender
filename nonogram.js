@@ -234,7 +234,7 @@ window.Games.nonogram = (function () {
     }
 
     function reveal(animate) {
-      msg.textContent = 'Du klarte det!';
+      msg.textContent = '';
       root.querySelector('.ng-top').classList.add('done');
       boardEl.classList.add('solved');
       const colors = puzzle.colors || {};
