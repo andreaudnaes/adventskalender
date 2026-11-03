@@ -4,11 +4,11 @@
 
 // Hvilket spill som ligger bak hver luke
 const GAMES = {
-  1: 'Ordgjetting', 2: 'Zip', 3: 'Connies', 4: 'Pyralinks',
+  1: 'Wordle', 2: 'Zip', 3: 'Connies', 4: 'Pyralinks',
   5: 'Nonogram', 6: 'Ordjakt', 7: 'Bikuben', 8: 'Sudoku',
-  9: 'Ordgjetting', 10: 'Zip', 11: 'Pyralinks', 12: 'Connies',
+  9: 'Wordle', 10: 'Zip', 11: 'Pyralinks', 12: 'Connies',
   13: 'Stort nonogram', 14: 'Ordjakt', 15: 'Sudoku', 16: 'Bikuben',
-  17: 'Pyralinks', 18: 'Ordgjetting', 19: 'Zip', 20: 'Dobbel runde: Connies',
+  17: 'Pyralinks', 18: 'Wordle', 19: 'Zip', 20: 'Dobbel runde: Connies',
   21: 'Nonogram', 22: 'Sudoku', 23: 'Ordjakt', 24: 'Finalen'
 };
 
