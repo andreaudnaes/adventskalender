@@ -55,15 +55,15 @@ const PUZZLES = {
 // Belønningen som vises når luken er løst
 const REWARDS = {
   1: {
-    title: 'En liten hilsen',
+    title: 'Du klarte det \u2665\uFE0E',
     text: '[Skriv meldingen din til luke 1 her]'
   },
   2: {
-    title: 'En liten hilsen',
+    title: 'Du klarte det \u2665\uFE0E',
     text: '[Skriv meldingen din til luke 2 her]'
   },
   4: {
-    title: 'En liten hilsen',
+    title: 'Du klarte det \u2665\uFE0E',
     text: '[Skriv meldingen din til luke 4 her]'
   },
   5: {
@@ -210,7 +210,7 @@ function showReward(n) {
     <svg class="reward-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 6.9L22 9.3l-5.8 4.6L18.2 21 12 17l-6.2 4 2-7.1L2 9.3l7.4-.4z"/></svg>
     <p class="reward-title"></p>
     <p class="reward-text"></p>`;
-  card.querySelector('.reward-title').textContent = r.title;
+  card.querySelector('.reward-title').textContent = r.title || 'Du klarte det \u2665\uFE0E';
   card.querySelector('.reward-text').textContent = r.text;
   $('game-area').append(card);
   setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
