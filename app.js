@@ -4,11 +4,11 @@
 
 // Hvilket spill som ligger bak hver luke
 const GAMES = {
-  1: 'Ordgjetting', 2: 'Zip', 3: 'Fire grupper', 4: 'Emoji-gåte',
+  1: 'Ordgjetting', 2: 'Zip', 3: 'Connies', 4: 'Emoji-gåte',
   5: 'Nonogram', 6: 'Ordjakt', 7: 'Bikuben', 8: 'Sudoku',
-  9: 'Ordgjetting', 10: 'Zip', 11: 'Emoji-gåte', 12: 'Fire grupper',
+  9: 'Ordgjetting', 10: 'Zip', 11: 'Emoji-gåte', 12: 'Connies',
   13: 'Stort nonogram', 14: 'Ordjakt', 15: 'Sudoku', 16: 'Bikuben',
-  17: 'Emoji-gåte', 18: 'Ordgjetting', 19: 'Zip', 20: 'Dobbel runde: fire grupper',
+  17: 'Emoji-gåte', 18: 'Ordgjetting', 19: 'Zip', 20: 'Dobbel runde: Connies',
   21: 'Nonogram', 22: 'Sudoku', 23: 'Ordjakt', 24: 'Finalen'
 };
 
