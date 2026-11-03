@@ -132,6 +132,17 @@ window.Games.nonogram = (function () {
       return true;
     }
 
+    // Når alle fylte ruter i en rad eller kolonne er funnet,
+    // settes kryss automatisk i resten av den raden/kolonnen.
+    function autoCross(i, j) {
+      if (lineDone(true, i)) {
+        for (let x = 0; x < n; x++) if (state[i][x] === 0) { state[i][x] = 2; paint(i, x); }
+      }
+      if (lineDone(false, j)) {
+        for (let x = 0; x < n; x++) if (state[x][j] === 0) { state[x][j] = 2; paint(x, j); }
+      }
+    }
+
     function updateHints() {
       for (let k = 0; k < n; k++) {
         rowHint[k].classList.toggle('done', lineDone(true, k));
@@ -191,6 +202,7 @@ window.Games.nonogram = (function () {
         }
       }
       paint(i, j);
+      autoCross(i, j);
       updateHints();
       save();
       checkWin();
