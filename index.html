@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="nb">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#4B0F1E">
+  <title>Adventskalender</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+
+    <!-- Forsiden -->
+    <section id="home" class="screen home">
+      <header class="hero">
+        <p class="eyebrow">Desember · 2026</p>
+        <h1 class="title">Adventskalender</h1>
+        <div class="ornament" aria-hidden="true">
+          <span></span>
+          <svg viewBox="0 0 24 24"><path d="M12 2l2.6 6.9L22 9.3l-5.8 4.6L18.2 21 12 17l-6.2 4 2-7.1L2 9.3l7.4-.4z"/></svg>
+          <span></span>
+        </div>
+        <p class="subtitle">En ny gåte bak hver luke</p>
+      </header>
+
+      <div id="grid" class="grid"></div>
+
+      <footer class="progress">
+        <div class="progress-text">
+          <span id="today-label"></span>
+          <span id="progress-label" class="progress-count"></span>
+        </div>
+        <div class="bar"><div id="bar-fill" class="bar-fill"></div></div>
+      </footer>
+
+      <div id="toast" class="toast" role="status" hidden></div>
+    </section>
+
+    <!-- Spillsiden -->
+    <section id="game" class="screen game" hidden>
+      <button type="button" id="back" class="back">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        Tilbake til kalenderen
+      </button>
+      <div class="game-head">
+        <p id="game-date" class="eyebrow"></p>
+        <p id="game-day" class="game-day"></p>
+        <h2 id="game-name" class="game-name"></h2>
+      </div>
+      <div id="game-area" class="game-area">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <p class="game-area-title">Dagens spill kommer her</p>
+        <p class="game-area-text">Når gåten er løst, låses dagens belønning og en brikke til finalen opp.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
