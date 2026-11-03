@@ -90,6 +90,14 @@ window.Games.ordgjetting = (function () {
       keys.append(row);
     });
 
+    // Forklaring av fargene
+    const legend = document.createElement('p');
+    legend.className = 'wg-legend';
+    legend.innerHTML =
+      '<span><i class="wg-dot present"></i>Gul: riktig bokstav, feil plass</span>' +
+      '<span><i class="wg-dot correct"></i>Rosa: riktig bokstav, riktig plass</span>';
+    keys.append(legend);
+
     function save() {
       try { localStorage.setItem(storeKey, JSON.stringify({ guesses })); } catch (e) { /* ignorer */ }
     }

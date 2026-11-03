@@ -327,6 +327,16 @@ html, body {
 .wg-key[data-state="present"] { background: #E0B95C; color: #2A0710; box-shadow: none; }
 .wg-key[data-state="absent"]  { background: #2A0710; color: rgba(243,230,211,.45); box-shadow: none; }
 
+.wg-legend {
+  margin: 4px 0 0;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px;
+  font-size: 11px; color: var(--cream-soft);
+}
+.wg-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.wg-dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
+.wg-dot.present { background: #E0B95C; }
+.wg-dot.correct { background: #B24F75; }
+
 /* ---------- Belønning ---------- */
 .reward {
   width: 100%;
