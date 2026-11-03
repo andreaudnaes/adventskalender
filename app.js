@@ -205,4 +205,41 @@ $('back').addEventListener('click', () => {
   showHome();
 });
 window.addEventListener('hashchange', route);
+
+// -------------------------------------------------------------
+//  Kun for testing: knapp for å starte på nytt.
+//  Vises bare når TEST_MODE er på og adressen har ?test=
+//  Forsvinner automatisk når TEST_MODE settes til false.
+// -------------------------------------------------------------
+if (TEST_MODE && new URLSearchParams(location.search).has('test')) {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'test-reset';
+  document.body.append(btn);
+
+  const label = () => {
+    const m = location.hash.match(/^#luke-(\d+)$/);
+    btn.textContent = m ? `Test: start luke ${m[1]} på nytt` : 'Test: nullstill alle luker';
+  };
+
+  btn.addEventListener('click', () => {
+    const m = location.hash.match(/^#luke-(\d+)$/);
+    try {
+      if (m) {
+        localStorage.removeItem(`advent-${m[1]}`);
+      } else {
+        Object.keys(localStorage)
+          .filter((k) => k.startsWith('advent-'))
+          .forEach((k) => localStorage.removeItem(k));
+      }
+    } catch (e) { /* ignorer */ }
+    if (m) openGame(parseInt(m[1], 10));
+    else showToast('Alle luker er nullstilt');
+  });
+
+  window.addEventListener('hashchange', label);
+  $('back').addEventListener('click', label);
+  label();
+}
+
 route();

@@ -345,3 +345,22 @@ html, body {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ---------- Kun i testmodus ---------- */
+.test-reset {
+  all: unset;
+  position: fixed;
+  top: calc(6px + env(safe-area-inset-top));
+  right: 8px;
+  z-index: 20;
+  padding: 8px 12px;
+  border: 1px dashed rgba(243,230,211,.6);
+  border-radius: 999px;
+  background: rgba(42,7,16,.85);
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--cream);
+  cursor: pointer;
+}
+.test-reset:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
