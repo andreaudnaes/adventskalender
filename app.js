@@ -199,7 +199,7 @@ function openGame(n) {
   $('game').classList.toggle('compact', !!game);
   if (game) {
     area.className = 'game-area playing';
-    cleanup = game.mount(area, puzzle, n, () => showReward(n));
+    cleanup = game.mount(area, puzzle, n, (won) => showReward(n, won !== false));
   } else {
     area.className = 'game-area';
     area.innerHTML = PLACEHOLDER;
@@ -210,8 +210,9 @@ function openGame(n) {
   window.scrollTo(0, 0);
 }
 
-function showReward(n) {
-  const r = REWARDS[n];
+// won = false betyr at spillet ble tapt (f.eks. Wordle uten riktig ord)
+function showReward(n, won = true) {
+  const r = won ? REWARDS[n] : { title: 'Det gikk ikke denne gang. Bedre lykke til i morgen \u2665\uFE0E', text: '' };
   if (!r) return;
   const card = document.createElement('div');
   card.className = 'reward';
@@ -221,6 +222,8 @@ function showReward(n) {
     <p class="reward-text"></p>`;
   card.querySelector('.reward-title').textContent = r.title || 'Du klarte det \u2665\uFE0E';
   card.querySelector('.reward-text').textContent = r.text;
+  if (!r.text) card.querySelector('.reward-text').remove();
+  if (!won) card.classList.add('lost');
   $('game-area').append(card);
   setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
 }
