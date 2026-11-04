@@ -77,6 +77,9 @@ window.Games.connies = (function () {
       if (w.length > 12) b.classList.add('xs');
       else if (w.length > 9) b.classList.add('sm');
       b.addEventListener('click', () => toggle(w));
+      // Fjern animasjonen når den er ferdig, ellers spilles den av på nytt
+      // hver gang rutenettet tegnes
+      b.addEventListener('animationend', () => b.classList.remove('shake', 'hop'));
       tileOf[w] = b;
     });
 
