@@ -653,6 +653,126 @@ html, body {
   font-size: 15px; font-weight: 600;
 }
 
+/* ---------- Connies ---------- */
+.cn { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.cn-help { margin: 0; font-size: 13px; color: var(--cream-soft); text-align: center; }
+
+.cn-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: minmax(72px, auto);
+  gap: 8px;
+}
+
+.cn-tile {
+  all: unset;
+  box-sizing: border-box;
+  display: flex; align-items: center; justify-content: center;
+  padding: 4px;
+  border-radius: 8px;
+  background: #6E1A2D;
+  box-shadow: inset 0 0 0 1px rgba(214,174,104,.3);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .2px;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.15;
+  color: var(--cream);
+  overflow-wrap: anywhere;
+  hyphens: auto;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .4s cubic-bezier(.3,.7,.2,1), background .15s, color .15s;
+}
+.cn-tile.sm { font-size: 11px; }
+.cn-tile.xs { font-size: 10px; }
+.cn-tile.on { background: var(--cream); color: #4B0F1E; box-shadow: none; }
+.cn-tile:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.cn-tile.hop { animation: hop .35s ease; }
+@keyframes hop { 40% { transform: translateY(-8px); } }
+.cn-tile.shake { animation: shake .4s ease-in-out; }
+
+.cn-banner {
+  grid-column: 1 / -1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  color: #2A0710;
+  text-align: center;
+}
+.cn-banner.pop { animation: pop-in .45s cubic-bezier(.3,.7,.2,1.3); }
+@keyframes pop-in { 0% { transform: scale(.85); opacity: .4; } 100% { transform: scale(1); opacity: 1; } }
+.cn-banner-title { margin: 0; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; line-height: 1.2; }
+.cn-banner-words { margin: 0; font-size: 13px; font-weight: 500; text-transform: uppercase; line-height: 1.2; }
+
+.cn-mistakes { display: flex; align-items: center; gap: 7px; font-size: 14px; color: var(--cream-soft); }
+.cn-mistakes.done { display: none; }
+.cn-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--gold); transition: background .3s, transform .3s; }
+.cn-dot.used { background: rgba(243,230,211,.15); transform: scale(.8); }
+
+.cn-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.cn-actions.done { display: none; }
+.cn-btn {
+  all: unset; cursor: pointer;
+  min-height: 44px; padding: 0 16px;
+  display: inline-flex; align-items: center;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(243,230,211,.6);
+  font-size: 14px; font-weight: 600; color: var(--cream);
+}
+.cn-btn.primary { background: var(--gold); color: #2A0710; box-shadow: none; }
+.cn-btn:disabled { opacity: .4; cursor: default; }
+.cn-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+.cn-toast {
+  position: fixed;
+  left: 50%;
+  top: calc(70px + env(safe-area-inset-top));
+  z-index: 30;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: var(--cream);
+  color: #4B0F1E;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0,0,0,.35);
+  opacity: 0;
+  transform: translate(-50%, -8px);
+  pointer-events: none;
+  transition: opacity .2s, transform .2s;
+}
+.cn-toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+.cn-fail {
+  position: absolute; left: 50%; top: 40%;
+  transform: translate(-50%, -50%);
+  width: min(280px, 90%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 22px 20px;
+  border: 1px solid var(--gold); border-radius: 12px;
+  background: #4B0F1E;
+  box-shadow: 0 12px 40px rgba(0,0,0,.5);
+  text-align: center;
+  animation: fadein .4s ease-out both;
+  z-index: 5;
+}
+.cn-fail[hidden] { display: none; }
+.cn-fail-title { margin: 0; font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 26px; }
+.cn-fail-text { margin: 0; font-size: 14px; color: var(--cream-soft); }
+.cn-retry {
+  all: unset; cursor: pointer;
+  margin-top: 6px; min-height: 44px; padding: 0 22px;
+  display: inline-flex; align-items: center;
+  border-radius: 999px; background: var(--gold); color: #2A0710;
+  font-size: 15px; font-weight: 600;
+}
+
 /* ---------- Kun i testmodus ---------- */
 .test-bar {
   position: fixed;

@@ -33,6 +33,10 @@ const PUZZLES = {
     numbers: [[2, 1, 1], [4, 7, 2], [0, 1, 3], [1, 6, 4], [4, 1, 5], [5, 2, 6], [6, 1, 7], [5, 6, 8], [4, 3, 9], [5, 4, 10], [4, 5, 11], [5, 5, 12]],
     solution: 'WzE3LCAxNiwgMjQsIDMyLCA0MCwgNDgsIDU2LCA1NywgNTgsIDU5LCA2MCwgNjEsIDYyLCA2MywgNTUsIDQ3LCAzOSwgMzEsIDIzLCAxNSwgNywgNiwgNSwgNCwgMywgMiwgMSwgMCwgOCwgOSwgMTAsIDExLCAxMiwgMTMsIDE0LCAyMiwgMjEsIDIwLCAxOSwgMTgsIDI2LCAyNSwgMzMsIDM0LCA0MiwgNDEsIDQ5LCA1MCwgNTEsIDUyLCA1MywgNTQsIDQ2LCAzOCwgMzAsIDI5LCAyOCwgMjcsIDM1LCA0MywgNDQsIDM2LCAzNywgNDVd' // kun for testknappen
   },
+  3: {
+    type: 'connies',
+    data: 'W3sidGl0bGUiOiAiR2F2ZXIgdmkgaGFyIGdpdHQgaHZlcmFuZHJlIiwgImNvbG9yIjogIiNFOEM3NjYiLCAid29yZHMiOiBbIktvcHAiLCAiQmxvbXN0ZXIiLCAiR2Vuc2VyIiwgIlNsaXBzIl19LCB7InRpdGxlIjogIkV0IGJhbmdlciBtw6VsdGlkIiwgImNvbG9yIjogIiM5Q0M5OEEiLCAid29yZHMiOiBbIlPDuHRwb3RldCIsICJBdm9rYWRvIiwgIkthcmJvbmFkZWRlaWciLCAiQ290dGFnZSBjaGVlc2UiXX0sIHsidGl0bGUiOiAiNC8xMCB0aW5nIGRlIGZsZXN0ZSBkZWx0YWdlcm5lIHRvayBtZWQgc2VnIHDDpSBBbG9uZSIsICJjb2xvciI6ICIjOURCRUU2IiwgIndvcmRzIjogWyJVbmRlcmJ1a3NlIiwgIlRhdSIsICJHcnl0ZSIsICJLbml2Il19LCB7InRpdGxlIjogIk9yZCBzb20gc2x1dHRlciBww6UgwqtkZXQgdmFyIGlra2UgZW4gYmlnIGRlYWwgZW4gZ2FuZ8K7IiwgImNvbG9yIjogIiNDM0E2RTAiLCAid29yZHMiOiBbIkJvcmRldCIsICLDmHZlcnN0ZSIsICJHcmF2IiwgIlNhbHQiXX1d'
+  },
   4: {
     type: 'pyralinks',
     data: 'WyJybyIsICJzIiwgInAiLCAia3kiLCAidG9yIiwgInJpcyIsICJ1dGUiLCAibGxpbmciLCAic3MiLCAiZ2V0IiwgInNrIiwgImtha2UiLCAiZ3LDuHQiLCAibGl2IiwgInN0ZWQiXQ=='
@@ -62,6 +66,10 @@ const REWARDS = {
   2: {
     title: 'Du klarte det \u2665\uFE0E',
     text: '[Skriv meldingen din til luke 2 her]'
+  },
+  3: {
+    title: 'Du klarte det \u2665\uFE0E',
+    text: '[Skriv meldingen din til luke 3 her]'
   },
   4: {
     title: 'Du klarte det \u2665\uFE0E',
