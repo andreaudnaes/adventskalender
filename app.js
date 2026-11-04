@@ -65,35 +65,12 @@ const PUZZLES = {
   }
 };
 
-// Belønningen som vises når luken er løst
+// Belønningen som vises når luken er løst.
+// Alle luker får «Du klarte det ♥». Legg til en luke her for å ha en ekstra tekst under.
 const REWARDS = {
-  1: {
-    title: 'Du klarte det \u2665\uFE0E',
-    text: '[Skriv meldingen din til luke 1 her]'
-  },
-  2: {
-    title: 'Du klarte det \u2665\uFE0E',
-    text: '[Skriv meldingen din til luke 2 her]'
-  },
-  3: {
-    title: 'Du klarte det \u2665\uFE0E',
-    text: '[Skriv meldingen din til luke 3 her]'
-  },
-  4: {
-    title: 'Du klarte det \u2665\uFE0E',
-    text: '[Skriv meldingen din til luke 4 her]'
-  },
   5: {
     title: 'Du klarte det \u2665\uFE0E',
     text: 'Knut på fisketur'
-  },
-  6: {
-    title: 'Du klarte det \u2665\uFE0E',
-    text: '[Skriv meldingen din til luke 6 her]'
-  },
-  8: {
-    title: 'Du klarte det \u2665\uFE0E',
-    text: '[Skriv meldingen din til luke 8 her]'
   }
 };
 
@@ -228,7 +205,7 @@ function openGame(n) {
 
 // won = false betyr at spillet ble tapt (f.eks. Wordle uten riktig ord)
 function showReward(n, won = true) {
-  const r = won ? REWARDS[n] : { title: 'Det gikk ikke denne gang. Bedre lykke til i morgen \u2665\uFE0E', text: '' };
+  const r = won ? (REWARDS[n] || { title: 'Du klarte det \u2665\uFE0E', text: '' }) : { title: 'Det gikk ikke denne gang. Bedre lykke til i morgen \u2665\uFE0E', text: '' };
   if (!r) return;
   if ($('game-area').querySelector('.reward')) return; // allerede vist
   const card = document.createElement('div');
