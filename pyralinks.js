@@ -69,11 +69,6 @@ window.Games.pyralinks = (function () {
           <div class="py-tries" aria-label="Forsøk igjen"></div>
           <button type="button" class="py-check">Sjekk</button>
         </div>
-        <div class="py-fail" hidden>
-          <p class="py-fail-title">Tomt for forsøk</p>
-          <p class="py-fail-text">Brikkene stokkes på nytt. Du har fem nye forsøk.</p>
-          <button type="button" class="py-retry">Prøv igjen</button>
-        </div>
       </div>`;
 
     const board = root.querySelector('.py-board');
@@ -81,7 +76,6 @@ window.Games.pyralinks = (function () {
     const msg = root.querySelector('.py-msg');
     const triesEl = root.querySelector('.py-tries');
     const checkBtn = root.querySelector('.py-check');
-    const failEl = root.querySelector('.py-fail');
 
     // Brikker: én per orddel. Hver brikke flytter seg mellom plassene,
     // slik at et bytte vises som at brikkene glir forbi hverandre.
@@ -279,12 +273,22 @@ window.Games.pyralinks = (function () {
         ? 'Ingen nye riktige koblinger'
         : `${newOk} ${newOk === 1 ? 'ny riktig kobling' : 'nye riktige koblinger'}!`;
       save(); draw();
-      if (tries <= 0) setTimeout(() => { failEl.hidden = false; }, 600);
+      if (tries <= 0) setTimeout(() => lose(true), 900);
     });
 
-    root.querySelector('.py-retry').addEventListener('click', () => {
-      fresh(); save(); failEl.hidden = true; msg.textContent = ''; draw();
-    });
+    // Tomt for forsøk: vis riktig pyramide
+    function lose(animate) {
+      order = sol.slice();
+      locked = sol.map((_, k) => k).slice(1);
+      wrong = [];
+      selected = -1;
+      save();
+      draw();
+      board.classList.add('revealed');
+      root.querySelector('.py-bottom').classList.add('done');
+      msg.textContent = 'Her var løsningen';
+      setTimeout(() => onDone(false), animate ? 900 : 0);
+    }
 
     function win(animate) {
       board.classList.add('solved');
@@ -299,7 +303,7 @@ window.Games.pyralinks = (function () {
     requestAnimationFrame(layout);
     draw();
     if (solved) win(false);
-    else if (tries <= 0) failEl.hidden = false;
+    else if (tries <= 0) lose(false);
 
     return () => ro.disconnect();
   }

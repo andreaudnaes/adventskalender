@@ -54,18 +54,12 @@ window.Games.connies = (function () {
           <button type="button" class="cn-btn" data-act="clear">Fjern valg</button>
           <button type="button" class="cn-btn primary" data-act="submit" disabled>Send inn</button>
         </div>
-        <div class="cn-fail" hidden>
-          <p class="cn-fail-title">Tomt for forsøk</p>
-          <p class="cn-fail-text">Ordene stokkes på nytt, og du får fire nye forsøk.</p>
-          <button type="button" class="cn-retry">Prøv igjen</button>
-        </div>
       </div>`;
 
     const grid = root.querySelector('.cn-grid');
     const mistakesEl = root.querySelector('.cn-mistakes');
     const actions = root.querySelector('.cn-actions');
     const submitBtn = root.querySelector('[data-act="submit"]');
-    const failEl = root.querySelector('.cn-fail');
 
     // Én knapp per ord, gjenbrukes slik at de kan gli når rekkefølgen endres
     const tileOf = {};
@@ -83,10 +77,10 @@ window.Games.connies = (function () {
       tileOf[w] = b;
     });
 
-    function banner(gi) {
+    function banner(gi, missed) {
       const g = groups[gi];
       const el = document.createElement('div');
-      el.className = 'cn-banner';
+      el.className = 'cn-banner' + (missed ? ' missed' : '');
       el.style.background = g.color;
       el.innerHTML = '<p class="cn-banner-title"></p><p class="cn-banner-words"></p>';
       el.querySelector('.cn-banner-title').textContent = g.title;
@@ -101,7 +95,11 @@ window.Games.connies = (function () {
 
       grid.innerHTML = '';
       solved.forEach((gi) => grid.append(banner(gi)));
-      const left = order.filter((w) => !solved.includes(groupOf[w]));
+      // Tapt: vis gruppene hun ikke fant
+      if (mistakes >= MISTAKES && solved.length < 4) {
+        groups.forEach((_, gi) => { if (!solved.includes(gi)) grid.append(banner(gi, true)); });
+      }
+      const left = mistakes >= MISTAKES ? [] : order.filter((w) => !solved.includes(groupOf[w]));
       left.forEach((w) => {
         const t = tileOf[w];
         t.classList.toggle('on', selected.includes(w));
@@ -206,7 +204,7 @@ window.Games.connies = (function () {
           save();
           render(false);
           busy = false;
-          if (mistakes >= MISTAKES) setTimeout(() => { failEl.hidden = false; }, 700);
+          if (mistakes >= MISTAKES) setTimeout(() => lose(true), 800);
         }
       }, 450);
     }
@@ -224,9 +222,14 @@ window.Games.connies = (function () {
       if (b.dataset.act === 'submit') submit();
     });
 
-    root.querySelector('.cn-retry').addEventListener('click', () => {
-      fresh(); selected = []; save(); failEl.hidden = true; render(false);
-    });
+    // Tomt for forsøk: vis alle gruppene
+    function lose(animate) {
+      selected = [];
+      render(false);
+      actions.classList.add('done');
+      mistakesEl.classList.add('done');
+      setTimeout(() => onDone(false), animate ? 900 : 0);
+    }
 
     function win(animate) {
       actions.classList.add('done');
@@ -236,7 +239,7 @@ window.Games.connies = (function () {
 
     render(false);
     if (solved.length === 4) win(false);
-    else if (mistakes >= MISTAKES) failEl.hidden = false;
+    else if (mistakes >= MISTAKES) lose(false);
 
     return () => {
       const t = document.querySelector('.cn-toast');

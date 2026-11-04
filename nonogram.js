@@ -69,11 +69,6 @@ window.Games.nonogram = (function () {
           </div>
         </div>
         <p class="ng-msg" role="status" aria-live="polite"></p>
-        <div class="ng-fail" hidden>
-          <p class="ng-fail-title">Tomt for liv</p>
-          <p class="ng-fail-text">Ikke gi opp. Bildet venter på deg!</p>
-          <button type="button" class="ng-retry">Prøv igjen</button>
-        </div>
       </div>`;
 
     const livesEl = root.querySelector('.ng-lives');
@@ -81,7 +76,6 @@ window.Games.nonogram = (function () {
     const colEl = root.querySelector('.ng-colclues');
     const rowEl = root.querySelector('.ng-rowclues');
     const msg = root.querySelector('.ng-msg');
-    const failEl = root.querySelector('.ng-fail');
     const boardEl = root.querySelector('.ng-board');
 
     // Hint
@@ -222,7 +216,7 @@ window.Games.nonogram = (function () {
       dragAction = null;
       if (lives <= 0) {
         save();
-        setTimeout(() => { failEl.hidden = false; }, 500);
+        setTimeout(() => reveal(true, false), 600);
       }
     }
 
@@ -233,8 +227,9 @@ window.Games.nonogram = (function () {
       reveal(true);
     }
 
-    function reveal(animate) {
-      msg.textContent = '';
+    // Vis bildet i farger. won = false når hun har brukt opp livene.
+    function reveal(animate, won = true) {
+      msg.textContent = won ? '' : 'Her var bildet';
       root.querySelector('.ng-top').classList.add('done');
       boardEl.classList.add('solved');
       const colors = puzzle.colors || {};
@@ -250,7 +245,7 @@ window.Games.nonogram = (function () {
           else set();
         }
       }
-      setTimeout(() => onDone(true), animate ? (2 * n) * 45 + 700 : 0);
+      setTimeout(() => onDone(won), animate ? (2 * n) * 45 + 700 : 0);
     }
 
     // ---------- Pekere (trykk og dra) ----------
@@ -288,18 +283,9 @@ window.Games.nonogram = (function () {
       });
     });
 
-    // Prøv igjen
-    root.querySelector('.ng-retry').addEventListener('click', () => {
-      fresh();
-      save();
-      failEl.hidden = true;
-      msg.textContent = '';
-      drawAll();
-    });
-
     drawAll();
     if (solved) reveal(false);
-    else if (lives <= 0) failEl.hidden = false;
+    else if (lives <= 0) reveal(false, false);
 
     return () => {
       window.removeEventListener('pointerup', stop);
