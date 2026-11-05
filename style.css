@@ -570,6 +570,7 @@ html, body {
 .py-lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
 .py-lines path { fill: none; stroke: rgba(214,174,104,.35); stroke-width: 2; transition: stroke .3s; }
 .py-lines path.ok { stroke: #E46A8C; stroke-width: 3; }
+.py-lines path.hide { opacity: 0; }
 .py-lines path.bad { stroke: rgba(243,230,211,.35); stroke-dasharray: 4 4; }
 
 .py-tile {
@@ -599,7 +600,9 @@ html, body {
 .py-tile[data-level="3"] { font-size: 12px; }
 .py-tile:focus-visible { outline: 2px solid var(--cream); outline-offset: 2px; }
 .py-tile.selected { background: var(--gold); color: #2A0710; transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,.4); }
-.py-tile.locked { background: #B24F75; color: #FFF6EA; box-shadow: none; cursor: default; }
+.py-tile.locked { background: #B24F75; color: #FFF6EA; box-shadow: none; }
+.py-tile.locked.selected { background: var(--gold); color: #2A0710; }
+.py-tile.nope { animation: shake .35s ease-in-out; }
 
 .py-tile.dragging {
   z-index: 10;

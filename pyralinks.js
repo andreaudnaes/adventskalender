@@ -1,6 +1,7 @@
 // =============================================================
 //  Pyralinks: en pyramide (1-2-4-8) der hver brikke danner et ord
 //  sammen med brikken over seg (øverste del først). Bytt plass på brikkene til alt stemmer.
+//  Bekreftede (rosa) koblinger henger sammen og flyttes som én bolk.
 //  Løsningen lagres kodet (base64), i "heap"-rekkefølge:
 //  plass 0 er toppen, barna til plass i er 2i+1 og 2i+2.
 // =============================================================
@@ -22,16 +23,16 @@ window.Games.pyralinks = (function () {
   function mount(root, puzzle, day, onDone) {
     const sol = decode(puzzle.data);        // 15 orddeler i riktig plassering
     const SIZE = sol.length;
-    const parentOf = {}, levelOf = {};
+    const parentOf = {};
     sol.forEach((w, i) => {
-      levelOf[w] = level(i);
       parentOf[w] = i === 0 ? null : sol[Math.floor((i - 1) / 2)];
     });
     const storeKey = `advent-${day}`;
 
-    // En kobling (fra plass k til forelderen) er riktig når brikken
-    // på k har riktig forelder og står på riktig nivå.
-    const linkOk = (arr, k) => parentOf[arr[k]] === arr[Math.floor((k - 1) / 2)] && levelOf[arr[k]] === level(k);
+    // En kobling (fra plass k til forelderen) er riktig når orddelen på k
+    // danner et ord med orddelen over seg.
+    const parentSlot = (k) => Math.floor((k - 1) / 2);
+    const linkOk = (arr, k) => parentOf[arr[k]] === arr[parentSlot(k)];
 
     function freshOrder() {
       let a;
@@ -39,10 +40,12 @@ window.Games.pyralinks = (function () {
       return a;
     }
 
-    let order, locked, tries, solved, wrong;
+    // confirmed: orddeler (barn) der koblingen opp til forelderen er bekreftet.
+    // Bekreftede brikker henger sammen i bolker som flyttes samlet.
+    let order, confirmed, tries, solved, wrong;
     function fresh() {
       order = freshOrder();
-      locked = [];
+      confirmed = [];
       tries = TRIES;
       solved = false;
       wrong = [];
@@ -51,11 +54,14 @@ window.Games.pyralinks = (function () {
     try {
       const s = JSON.parse(localStorage.getItem(storeKey));
       if (s && Array.isArray(s.order) && s.order.slice().sort().join() === sol.slice().sort().join()) {
-        order = s.order; locked = s.locked || []; tries = s.tries; solved = !!s.solved;
+        order = s.order; tries = s.tries; solved = !!s.solved;
+        if (Array.isArray(s.confirmed)) confirmed = s.confirmed;
+        else if (Array.isArray(s.locked)) confirmed = s.locked.map((k) => order[k]); // gammelt format
+        confirmed = confirmed.filter((w) => { const k = order.indexOf(w); return k > 0 && linkOk(order, k); });
       }
     } catch (e) { /* ignorer */ }
     const save = () => {
-      try { localStorage.setItem(storeKey, JSON.stringify({ order, locked, tries, solved })); } catch (e) { /* ignorer */ }
+      try { localStorage.setItem(storeKey, JSON.stringify({ order, confirmed, tries, solved })); } catch (e) { /* ignorer */ }
     };
 
     root.innerHTML = `
@@ -129,13 +135,75 @@ window.Games.pyralinks = (function () {
       }
     }
 
-    function isLocked(k) {
-      // en brikke er låst hvis en av koblingene dens er bekreftet riktig
-      if (locked.includes(k)) return true;
-      return locked.some((x) => Math.floor((x - 1) / 2) === k);
+    // Er brikken på plass k med i en bekreftet kobling?
+    function isConfirmed(k) {
+      if (k > 0 && confirmed.includes(order[k])) return true;
+      return [2 * k + 1, 2 * k + 2].some((c) => c < SIZE && confirmed.includes(order[c]));
+    }
+
+    // Bolken (sammenhengende bekreftede brikker) som brikken på plass k hører til
+    function groupOf(k) {
+      const seen = new Set([k]);
+      const stack = [k];
+      while (stack.length) {
+        const x = stack.pop();
+        const nb = [];
+        if (x > 0 && confirmed.includes(order[x])) nb.push(parentSlot(x));
+        [2 * x + 1, 2 * x + 2].forEach((c) => { if (c < SIZE && confirmed.includes(order[c])) nb.push(c); });
+        nb.forEach((y) => { if (!seen.has(y)) { seen.add(y); stack.push(y); } });
+      }
+      return [...seen];
+    }
+    const depth = (k) => level(k);
+    // Veien fra plass a ned til plass s, som en liste med 0 (venstre) og 1 (høyre)
+    function relPath(a, s) {
+      const bits = [];
+      while (s !== a) { bits.unshift(s % 2 === 1 ? 0 : 1); s = parentSlot(s); }
+      return bits;
+    }
+    function descend(b, bits) {
+      for (const bit of bits) { b = 2 * b + 1 + bit; if (b >= SIZE) return -1; }
+      return b;
+    }
+
+    // Flytt bolken som brikken på plass from hører til, slik at den brikken havner på plass to.
+    // Brikkene som var der, flyttes til plassene bolken forlot. Returnerer ny rekkefølge eller null.
+    function planMove(from, to) {
+      const members = groupOf(from);
+      if (members.includes(to)) return null;
+      const a = members.reduce((m, x) => (depth(x) < depth(m) ? x : m), members[0]);
+      const pathFrom = relPath(a, from);
+      const d = pathFrom.length;
+      if (depth(to) < d) return null;
+      let b = to;
+      for (let i = 0; i < d; i++) b = parentSlot(b);
+      const pathTo = relPath(b, to);
+      // Speil bolken der det trengs (rekkefølgen på søsken spiller ingen rolle)
+      const flip = pathFrom.map((bit, i) => bit !== pathTo[i]);
+      const target = new Map(); // fra plass -> til plass
+      for (const m of members) {
+        const bits = relPath(a, m).map((bit, i) => (i < flip.length && flip[i] ? 1 - bit : bit));
+        const t = descend(b, bits);
+        if (t < 0) return null;
+        target.set(m, t);
+      }
+      const tgtToSrc = new Map([...target].map(([src, tgt]) => [tgt, src]));
+      const next = order.slice();
+      // brikker som blir fortrengt, følger kjeden til en ledig plass
+      for (const x of tgtToSrc.keys()) {
+        if (target.has(x)) continue;
+        let y = x;
+        while (tgtToSrc.has(y)) y = tgtToSrc.get(y);
+        next[y] = order[x];
+      }
+      for (const [src, tgt] of target) next[tgt] = order[src];
+      // Alle bekreftede koblinger må fortsatt henge sammen
+      const ok = confirmed.every((w) => { const k = next.indexOf(w); return k > 0 && linkOk(next, k); });
+      return ok ? next : null;
     }
 
     let selected = -1;
+    let selectedGroup = [];
 
     function placeTiles() {
       if (!pos.length) return;
@@ -155,12 +223,12 @@ window.Games.pyralinks = (function () {
       placeTiles();
       order.forEach((w, k) => {
         const t = tileOf[w];
-        t.classList.toggle('locked', isLocked(k));
-        t.classList.toggle('selected', k === selected);
-        t.setAttribute('aria-label', `${w}${isLocked(k) ? ', låst' : ''}`);
+        t.classList.toggle('locked', isConfirmed(k));
+        t.classList.toggle('selected', selectedGroup.includes(k));
+        t.setAttribute('aria-label', `${w}${isConfirmed(k) ? ', bekreftet' : ''}`);
       });
       for (let k = 1; k < SIZE; k++) {
-        lines[k].setAttribute('class', locked.includes(k) ? 'ok' : (wrong.includes(k) ? 'bad' : ''));
+        lines[k].setAttribute('class', confirmed.includes(order[k]) ? 'ok' : (wrong.includes(k) ? 'bad' : ''));
       }
       triesEl.innerHTML = '';
       for (let i = 0; i < TRIES; i++) {
@@ -171,32 +239,41 @@ window.Games.pyralinks = (function () {
       triesEl.setAttribute('aria-label', `${tries} av ${TRIES} forsøk igjen`);
     }
 
-    function swap(a, b) {
-      if (a === b || isLocked(a) || isLocked(b)) return;
-      [order[a], order[b]] = [order[b], order[a]];
-      wrong = wrong.filter((k) => ![a, b].includes(k) && ![a, b].includes(Math.floor((k - 1) / 2)));
-      selected = -1;
+    function nope(slots, text) {
+      msg.textContent = text;
+      slots.forEach((k) => {
+        const t = tileAt(k);
+        t.classList.remove('nope'); void t.offsetWidth; t.classList.add('nope');
+      });
+    }
+
+    // Flytt (eller bytt) og la brikkene gli på plass
+    function move(from, to) {
+      const next = planMove(from, to);
+      selected = -1; selectedGroup = [];
+      if (!next) { draw(); nope(groupOf(from), 'Bolken får ikke plass der'); return false; }
+      order = next;
+      wrong = [];
       msg.textContent = '';
       save();
       draw();
+      return true;
     }
 
     function tap(k) {
       if (solved || tries <= 0) return;
-      if (isLocked(k)) { msg.textContent = 'Den brikken er allerede riktig'; return; }
-      if (selected === -1) { selected = k; draw(); return; }
-      if (selected === k) { selected = -1; draw(); return; }
-      swap(selected, k);
+      if (selected === -1) { selected = k; selectedGroup = groupOf(k); draw(); return; }
+      if (selectedGroup.includes(k)) { selected = -1; selectedGroup = []; draw(); return; }
+      move(selected, k);
     }
 
     // Trykk for å velge og trykk igjen for å bytte,
-    // eller løft en brikke og slipp den oppå en annen.
+    // eller løft en brikke (med hele bolken sin) og slipp den oppå en annen.
     let drag = null;
     const slotUnder = (x, y, except) => {
       for (let k = 0; k < SIZE; k++) {
-        const t = tileAt(k);
-        if (t === except) continue;
-        const r = t.getBoundingClientRect();
+        if (except.includes(k)) continue;
+        const r = tileAt(k).getBoundingClientRect();
         if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) return k;
       }
       return -1;
@@ -207,28 +284,30 @@ window.Games.pyralinks = (function () {
       const t = e.target.closest('.py-tile');
       if (!t || solved || tries <= 0) return;
       const k = +t.dataset.k;
-      drag = { k, t, x: e.clientX, y: e.clientY, moved: false, target: -1, locked: isLocked(k) };
-      if (!drag.locked) t.setPointerCapture(e.pointerId);
+      const group = groupOf(k);
+      drag = { k, t, group, tiles: group.map(tileAt), x: e.clientX, y: e.clientY, moved: false, target: -1 };
+      t.setPointerCapture(e.pointerId);
     });
 
     board.addEventListener('pointermove', (e) => {
-      if (!drag || drag.locked) return;
+      if (!drag) return;
       const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
       if (!drag.moved && Math.hypot(dx, dy) < 6) return;
       if (!drag.moved) {
         drag.moved = true;
-        selected = -1;
+        selected = -1; selectedGroup = [];
         draw();
-        drag.t.classList.add('dragging');
+        drag.tiles.forEach((t) => t.classList.add('dragging'));
+        // skjul de rosa linjene inne i bolken mens den flyttes
+        drag.group.forEach((k) => { if (k > 0 && drag.group.includes(parentSlot(k))) lines[k].setAttribute('class', 'hide'); });
       }
       e.preventDefault();
-      drag.t.style.transform = `translate(${dx}px, ${dy}px) scale(1.1)`;
-      const k = slotUnder(e.clientX, e.clientY, drag.t);
-      const target = k >= 0 && !isLocked(k) ? k : -1;
-      if (target !== drag.target) {
+      drag.tiles.forEach((t) => { t.style.transform = `translate(${dx}px, ${dy}px) scale(1.06)`; });
+      const k = slotUnder(e.clientX, e.clientY, drag.group);
+      if (k !== drag.target) {
         clearTarget();
-        if (target >= 0) tileAt(target).classList.add('target');
-        drag.target = target;
+        if (k >= 0) tileAt(k).classList.add('target');
+        drag.target = k;
       }
     });
 
@@ -238,19 +317,16 @@ window.Games.pyralinks = (function () {
       drag = null;
       clearTarget();
       if (!d.moved) { tap(d.k); return; }
-      // Slipp: la brikken gli fra der den ble sluppet til sin nye plass
-      const r0 = d.t.getBoundingClientRect();
-      d.t.classList.add('dropping');          // ingen animasjon mens vi flytter den
-      d.t.classList.remove('dragging');
-      d.t.style.transform = '';
-      if (d.target >= 0 && e.type === 'pointerup') swap(d.k, d.target);
-      else draw();
-      const r1 = d.t.getBoundingClientRect();  // den nye plassen
-      const sx = r0.width / r1.width;
-      d.t.style.transform = `translate(${r0.left - r1.left + (r0.width - r1.width) / 2}px, ${r0.top - r1.top + (r0.height - r1.height) / 2}px) scale(${sx})`;
-      void d.t.offsetWidth;
-      d.t.classList.remove('dropping');       // gli fra slippunktet til plassen
-      d.t.style.transform = '';
+      // Slipp: la bolken gli fra der den ble sluppet til sin nye plass
+      const before = d.tiles.map((t) => t.getBoundingClientRect());
+      d.tiles.forEach((t) => { t.classList.add('dropping'); t.classList.remove('dragging'); t.style.transform = ''; });
+      if (!(d.target >= 0 && e.type === 'pointerup' && move(d.k, d.target))) draw();
+      d.tiles.forEach((t, i) => {
+        const r0 = before[i], r1 = t.getBoundingClientRect();
+        t.style.transform = `translate(${r0.left - r1.left + (r0.width - r1.width) / 2}px, ${r0.top - r1.top + (r0.height - r1.height) / 2}px) scale(${r0.width / r1.width})`;
+      });
+      void board.offsetWidth;
+      d.tiles.forEach((t) => { t.classList.remove('dropping'); t.style.transform = ''; });
     };
     board.addEventListener('pointerup', endDrag);
     board.addEventListener('pointercancel', endDrag);
@@ -258,11 +334,11 @@ window.Games.pyralinks = (function () {
     checkBtn.addEventListener('click', () => {
       if (solved || tries <= 0) return;
       tries--;
-      selected = -1;
+      selected = -1; selectedGroup = [];
       const okNow = [], badNow = [];
       for (let k = 1; k < SIZE; k++) (linkOk(order, k) ? okNow : badNow).push(k);
-      const newOk = okNow.filter((k) => !locked.includes(k)).length;
-      locked = okNow;
+      const newOk = okNow.filter((k) => !confirmed.includes(order[k])).length;
+      confirmed = okNow.map((k) => order[k]);
       wrong = badNow;
       if (badNow.length === 0) {
         solved = true;
@@ -279,9 +355,9 @@ window.Games.pyralinks = (function () {
     // Tomt for forsøk: vis riktig pyramide
     function lose(animate) {
       order = sol.slice();
-      locked = sol.map((_, k) => k).slice(1);
+      confirmed = sol.slice(1);
       wrong = [];
-      selected = -1;
+      selected = -1; selectedGroup = [];
       save();
       draw();
       board.classList.add('revealed');
@@ -311,7 +387,7 @@ window.Games.pyralinks = (function () {
   // Kun for testing: lagret tilstand som om pyramiden er løst
   const solvedState = (puzzle) => {
     const sol = decode(puzzle.data);
-    return { order: sol, locked: sol.map((_, k) => k).slice(1), tries: TRIES, solved: true };
+    return { order: sol, confirmed: sol.slice(1), tries: TRIES, solved: true };
   };
 
   return { mount, solvedState };
