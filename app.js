@@ -27,6 +27,7 @@ const LAYOUT = [
 // Innholdet i hver luke. Svarene er kodet (base64) så de ikke står i klartekst.
 const PUZZLES = {
   1: { type: 'ordgjetting', answer: 'S0FLQU8=' },
+  9: { type: 'ordgjetting', answer: 'UElBTk8=' },
   2: {
     type: 'zip',
     size: 8,
