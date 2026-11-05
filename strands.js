@@ -140,7 +140,9 @@ window.Games.strands = (function () {
       const path = current.slice();
       current = [];
       if (word.length < 4) { draw(); if (word.length > 1) flash('For kort', 'bad'); return; }
-      const theme = themeWords.find((w) => !found.includes(w) && pathOf[w].length === path.length && pathOf[w].every((x, k) => x === path[k]));
+      // Samme ruter i samme eller motsatt rekkefølge av like bokstaver teller som riktig
+      const sameCells = (w) => pathOf[w].length === path.length && pathOf[w].every((x) => path.includes(x));
+      const theme = themeWords.find((w) => !found.includes(w) && w === word && sameCells(w));
       if (theme) {
         found.push(theme);
         if (hinted === theme) hinted = null;
@@ -155,6 +157,7 @@ window.Games.strands = (function () {
         if (found.length === themeWords.length) win(true);
         return;
       }
+      if (themeWords.includes(word) && !found.includes(word)) { draw(); flash('Riktig ord, men ikke her', 'bad'); return; }
       if (found.includes(word) || bonus.includes(word)) { draw(); flash('Allerede funnet'); return; }
       if (extra.has(word)) {
         bonus.push(word);
