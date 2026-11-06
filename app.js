@@ -40,7 +40,7 @@ const PUZZLES = {
   },
   4: {
     type: 'pyralinks',
-    data: 'WyJybyIsICJzIiwgInAiLCAia3kiLCAidG9yIiwgInJpcyIsICJ1dGUiLCAibGxpbmciLCAic3MiLCAiZ2V0IiwgInNrIiwgImtha2UiLCAiZ3LDuHQiLCAibGl2IiwgInN0ZWQiXQ=='
+    data: 'WyJybyIsICJzIiwgInAiLCAia3kiLCAidG9yIiwgInJpcyIsICJ1dGUiLCAibGxpbmciLCAic3MiLCAiZ2V0IiwgInNrIiwgImtha2UiLCAia29rZXIiLCAibGl2IiwgInN0ZWQiXQ=='
   },
   6: {
     type: 'strands',
