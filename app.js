@@ -201,6 +201,109 @@ function showToast(text) {
 let cleanup = null;
 const PLACEHOLDER = $('game-area').innerHTML;
 
+// -------------------------------------------------------------
+//  Forklaring av hvert spill (?-knappen). Bare reglene, ikke løsningen.
+// -------------------------------------------------------------
+const HELP = {
+  ordgjetting: {
+    intro: 'Gjett ordet på fem bokstaver. Du har seks forsøk.',
+    points: [
+      'Hvert gjett må være et ekte norsk ord.',
+      'Etter hvert gjett farges bokstavene: rosa betyr riktig bokstav på riktig plass, gul betyr at bokstaven finnes i ordet, men på en annen plass, og mørk betyr at den ikke er med.',
+      'Samme bokstav kan forekomme flere ganger i ordet.'
+    ]
+  },
+  zip: {
+    intro: 'Tegn én sammenhengende linje som fyller hele brettet.',
+    points: [
+      'Start på 1 og gå innom tallene i rekkefølge. Linjen skal slutte på det høyeste tallet.',
+      'Linjen går bare opp, ned eller til siden, aldri på skrå.',
+      'Hver rute skal brukes nøyaktig én gang, og linjen kan ikke krysse seg selv.',
+      'Dra tilbake eller trykk «Angre» for å fjerne et steg.'
+    ]
+  },
+  connies: {
+    intro: 'Finn fire grupper med fire ord som har noe til felles.',
+    points: [
+      'Marker fire ord du tror hører sammen, og trykk «Send inn».',
+      'Pass på feller: noen ord ser ut til å passe i flere grupper, men hvert ord hører bare til én.',
+      'Kategoriene kan være alt fra temaer til ordlek, som ord som gjemmer andre ord.',
+      '«En unna» betyr at tre av de fire ordene er riktige.',
+      'Du kan gjøre fire feil.'
+    ]
+  },
+  pyralinks: {
+    intro: 'Sett brikkene sammen til en pyramide der alle koblingene danner ord.',
+    points: [
+      'Hver brikke danner et ord sammen med brikken rett over seg, og den øverste delen kommer først. JUL over TRE blir for eksempel JULETRE.',
+      'Bytt plass på brikker ved å trykke på to brikker etter hverandre, eller ved å dra den ene oppå den andre.',
+      'Trykk «Sjekk» for å se hvilke koblinger som er riktige. De blir rosa og henger sammen som en bolk du kan flytte samlet.',
+      'Du har fem forsøk.'
+    ]
+  },
+  nonogram: {
+    intro: 'Fyll inn ruter slik at et skjult bilde kommer frem.',
+    points: [
+      'Tallene ved hver rad og kolonne viser hvor lange rekker med fylte ruter det er der, i riktig rekkefølge.',
+      'Mellom to rekker er det alltid minst én tom rute.',
+      'Bruk «Kryss» til å merke ruter du vet skal være tomme.',
+      'Du har tre liv. En feil rute koster ett liv.'
+    ]
+  },
+  strands: {
+    intro: 'Finn ordene som passer til dagens tema.',
+    points: [
+      'Dra over bokstaver som ligger ved siden av hverandre, også på skrå. Ordene kan svinge i alle retninger.',
+      'Temaordene fyller hele brettet, og hver bokstav brukes nøyaktig én gang.',
+      'Spangrammet beskriver selve temaet og går fra den ene siden av brettet til den motsatte.',
+      'Andre ord på minst fire bokstaver fyller opp hint-knappen.'
+    ]
+  },
+  pips: {
+    intro: 'Legg alle dominobrikkene på brettet slik at hver rute blir dekket.',
+    points: [
+      'Fargede soner har en regel: et tall betyr at prikkene i sonen til sammen skal bli akkurat det tallet. < og > betyr mindre eller større enn.',
+      '= betyr at alle rutene i sonen skal ha like mange prikker, og ≠ betyr at alle skal være forskjellige.',
+      'Ruter uten farge har ingen regel.',
+      'Dra brikkene på plass, og trykk på en brikke for å rotere den.'
+    ]
+  },
+  bikuben: {
+    intro: 'Lag så mange ord du kan av bokstavene i bikuben.',
+    points: [
+      'Ordene må ha minst fire bokstaver.',
+      'Midtbokstaven må være med i hvert ord. Bokstavene kan brukes flere ganger.',
+      'Et pangram bruker alle sju bokstavene. Finn det!',
+      'Ord på fire bokstaver gir 1 poeng, lengre ord gir like mange poeng som de har bokstaver, og pangrammet gir 7 ekstra.'
+    ]
+  }
+};
+
+let lastFocus = null;
+function openHelp() {
+  const p = PUZZLES[currentDay()];
+  const h = p && HELP[p.type];
+  if (!h) return;
+  $('help-title').textContent = GAMES[currentDay()];
+  $('help-intro').textContent = h.intro;
+  const list = $('help-list');
+  list.innerHTML = '';
+  h.points.forEach((t) => { const li = document.createElement('li'); li.textContent = t; list.append(li); });
+  lastFocus = document.activeElement;
+  $('help').hidden = false;
+  $('help-ok').focus();
+}
+function closeHelp() {
+  $('help').hidden = true;
+  if (lastFocus) lastFocus.focus();
+}
+const currentDay = () => { const m = location.hash.match(/^#luke-(\d+)$/); return m ? +m[1] : 0; };
+$('help-btn').addEventListener('click', openHelp);
+$('help-close').addEventListener('click', closeHelp);
+$('help-ok').addEventListener('click', closeHelp);
+$('help').addEventListener('click', (e) => { if (e.target === $('help')) closeHelp(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('help').hidden) closeHelp(); });
+
 function openGame(n) {
   $('game-date').textContent = `Luke ${n} · ${n}. desember`;
   $('game-day').textContent = n;
@@ -211,6 +314,8 @@ function openGame(n) {
   const game = puzzle && window.Games && window.Games[puzzle.type];
   if (cleanup) { cleanup(); cleanup = null; }
   $('game').classList.toggle('compact', !!game);
+  $('help-btn').hidden = !(game && HELP[puzzle.type]);
+  $('help').hidden = true;
   if (game) {
     area.className = 'game-area playing';
     cleanup = game.mount(area, puzzle, n, (won) => showReward(n, won !== false));
