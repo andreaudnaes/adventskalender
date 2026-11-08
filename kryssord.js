@@ -1,7 +1,7 @@
 // =============================================================
 //  Minikryssord (inspirert av NYT Mini)
 //  Data (base64-JSON): { grid: ["ABCDE", "#...", ...], across: {1: "hint"}, down: {1: "hint"} }
-//  '#' er en svart rute.
+//  '#' er en svart rute. Valgfritt: marked: [[rad, kol], ...] får en rosa ring.
 // =============================================================
 window.Games = window.Games || {};
 
@@ -88,10 +88,13 @@ window.Games.kryssord = (function () {
     const msg = root.querySelector('.kr-msg');
     const keys = root.querySelector('.kr-keys');
 
+    // Markerte ruter (rosa ring), f.eks. for et skjult ord
+    const marked = new Set((data.marked || []).map(([r, c]) => r * C + c));
+
     // Rutenett
     const cells = solution.map((s, i) => {
       const el = document.createElement('div');
-      el.className = 'kr-cell' + (s === null ? ' black' : '');
+      el.className = 'kr-cell' + (s === null ? ' black' : '') + (marked.has(i) ? ' mark' : '');
       el.setAttribute('role', 'gridcell');
       if (s !== null) {
         if (num[i]) { const t = document.createElement('span'); t.className = 'kr-num'; t.textContent = num[i]; el.append(t); }
