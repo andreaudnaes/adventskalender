@@ -21,13 +21,13 @@ window.Games.strands = (function () {
     const extra = new Set(data.extra);
     const storeKey = `advent-${day}`;
 
-    let found = [], bonus = [], hinted = null, hintsUsed = 0;
+    let found = [], bonus = [], hinted = [], hintsUsed = 0; // hinted: temaord som lyser opp
     try {
       const s = JSON.parse(localStorage.getItem(storeKey));
       if (s && Array.isArray(s.found)) {
         found = s.found.filter((w) => pathOf[w]);
         bonus = s.bonus || [];
-        hinted = s.hinted && pathOf[s.hinted] ? s.hinted : null;
+        hinted = (Array.isArray(s.hinted) ? s.hinted : (s.hinted ? [s.hinted] : [])).filter((w) => pathOf[w] && !found.includes(w));
         hintsUsed = s.hintsUsed || 0;
       }
     } catch (e) { /* ignorer */ }
@@ -61,6 +61,7 @@ window.Games.strands = (function () {
     const wordEl = root.querySelector('.sd-word');
     const hintBtn = root.querySelector('.sd-hint');
     const hintFill = root.querySelector('.sd-hint-fill');
+    const hintText = root.querySelector('.sd-hint-text');
     const progressEl = root.querySelector('.sd-progress');
 
     const cells = [];
@@ -91,7 +92,7 @@ window.Games.strands = (function () {
         c.classList.remove('span', 'theme', 'sel', 'hint');
         if (owner[i]) c.classList.add(owner[i]);
         else if (current.includes(i)) c.classList.add('sel');
-        if (hinted && !found.includes(hinted) && pathOf[hinted].includes(i)) c.classList.add('hint');
+        if (hinted.some((w) => !found.includes(w) && pathOf[w].includes(i))) c.classList.add('hint');
       });
       svg.setAttribute('viewBox', `0 0 ${C} ${R}`);
       svg.innerHTML =
@@ -101,12 +102,15 @@ window.Games.strands = (function () {
       wordEl.textContent = current.map(letter).join('');
       const themeCount = themeWords.length;
       progressEl.innerHTML = `<b>${found.length}</b> av <b>${themeCount}</b> temaord funnet`;
-      const earned = Math.floor(bonus.length / HINT_EVERY) - hintsUsed;
+      // Hint spares opp: hvert tredje ekstra ord gir ett hint
+      const earned = Math.max(0, Math.floor(bonus.length / HINT_EVERY) - hintsUsed);
       const partial = (bonus.length % HINT_EVERY) / HINT_EVERY;
-      const canHint = (earned > 0) && !hinted && found.length < themeCount;
+      const left = themeWords.filter((w) => !found.includes(w) && !hinted.includes(w));
+      const canHint = earned > 0 && left.length > 0;
       hintBtn.disabled = !canHint;
-      hintFill.style.width = `${(earned > 0 ? 1 : partial) * 100}%`;
-      hintBtn.setAttribute('aria-label', canHint ? 'Bruk hint' : `Hint: finn ${HINT_EVERY - (bonus.length % HINT_EVERY)} ord til`);
+      hintFill.style.width = `${(canHint ? 1 : partial) * 100}%`;
+      hintText.textContent = earned > 1 ? `Hint ×${earned}` : 'Hint';
+      hintBtn.setAttribute('aria-label', canHint ? `Bruk hint (${earned} tilgjengelig)` : `Hint: finn ${HINT_EVERY - (bonus.length % HINT_EVERY)} ord til`);
     }
 
     function flash(text, cls) {
@@ -145,7 +149,7 @@ window.Games.strands = (function () {
       const theme = themeWords.find((w) => !found.includes(w) && w === word && sameCells(w));
       if (theme) {
         found.push(theme);
-        if (hinted === theme) hinted = null;
+        hinted = hinted.filter((w) => w !== theme);
         save();
         draw();
         const isSpan = theme === data.span;
@@ -212,8 +216,11 @@ window.Games.strands = (function () {
 
     hintBtn.addEventListener('click', () => {
       if (hintBtn.disabled) return;
-      const left = themeWords.filter((w) => !found.includes(w) && w !== data.span);
-      hinted = left[0] || data.span;
+      // Lys opp neste temaord som ikke er funnet eller allerede hintet (spangrammet til slutt)
+      const left = themeWords.filter((w) => !found.includes(w) && !hinted.includes(w));
+      const next = left.find((w) => w !== data.span) || left[0];
+      if (!next) return;
+      hinted.push(next);
       hintsUsed++;
       save();
       draw();
@@ -235,7 +242,7 @@ window.Games.strands = (function () {
   }
 
   // Kun for testing: lagret tilstand som om alle ordene er funnet
-  const solvedState = (puzzle) => ({ found: Object.keys(decode(puzzle.data).words), bonus: [], hinted: null, hintsUsed: 0 });
+  const solvedState = (puzzle) => ({ found: Object.keys(decode(puzzle.data).words), bonus: [], hinted: [], hintsUsed: 0 });
 
   return { mount, solvedState };
 })();
