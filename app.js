@@ -7,7 +7,7 @@ const GAMES = {
   1: 'Wordle', 2: 'Zip', 3: 'Connies', 4: 'Pyralinks',
   5: 'Nonogram', 6: 'Strands', 7: 'Bikuben', 8: 'Pips',
   9: 'Wordle', 10: 'Zip', 11: 'Pyralinks', 12: 'Connies',
-  13: 'Stort nonogram', 14: 'Strands', 15: 'Sudoku', 16: 'Bikuben',
+  13: 'Nonogram', 14: 'Strands', 15: 'Sudoku', 16: 'Bikuben',
   17: 'Pyralinks', 18: 'Wordle', 19: 'Zip', 20: 'Dobbel runde: Connies',
   21: 'Nonogram', 22: 'Sudoku', 23: 'Strands', 24: 'Finalen'
 };
@@ -61,6 +61,21 @@ const PUZZLES = {
   12: {
     type: 'connies',
     data: 'W3sidGl0bGUiOiAiUmltZXIgcMOlIGp1bCIsICJjb2xvciI6ICIjOUNDOThBIiwgIndvcmRzIjogWyJHdWwiLCAiS3VsIiwgIlNranVsIiwgIkZ1Z2wiXX0sIHsidGl0bGUiOiAiVGluZyBkdSBoYXIgZsOldHQgcMOlIGtyb2tlbiIsICJjb2xvciI6ICIjOURCRUU2IiwgIndvcmRzIjogWyJMYW5nZSIsICJMeXIiLCAiQnVubmVuIiwgIk1lZyJdfSwgeyJ0aXRsZSI6ICJJbm5laG9sZGVyIHRhbGxlbmUgMeKAkzQiLCAiY29sb3IiOiAiI0MzQTZFMCIsICJ3b3JkcyI6IFsiRW5nZWwiLCAiVG9tYXQiLCAiVHJlbmluZyIsICJTYWZpcmVyIl19LCB7InRpdGxlIjogIkFsbGUgb3JkZW5lIGJsaXIgZXQgbnl0dCBvcmQgaHZpcyBkdSBsZWdnZXIgcMOlIC1rYWtlIiwgImNvbG9yIjogIiNFOEM3NjYiLCAid29yZHMiOiBbIlJpcyIsICJQZXBwZXIiLCAiUGFubmUiLCAiS2rDuHR0Il19XQ=='
+  },
+  13: {
+    type: 'nonogram',
+    data: 'WyIuLi4uLi4uLi5LSy4uLi4iLCAiLi4uLkJCQkJCS0suLi4uIiwgIi4uQkJCQkJCQkJCQkIuLiIsICIuQkJCQkJCQkJCQkJCQi4iLCAiLkJCQkJCLi4uQkJCQkIuIiwgIi5CQkJCLi4uLi5CQkJCLiIsICIuQkJCQi4uRi4uQkJCQi4iLCAiLkJCQkIuRllGLkJCQkIuIiwgIi5CQkJCRllZWUZCQkJCLiIsICJTU1NTU1NTU1NTU1NTU1MiLCAiLlNTLi4uLi4uLi4uU1MuIiwgIi4uLi4uLi4uLi4uLi4uLiIsICIuLlBQUC4uLi4uLi4uLi4iLCAiLlBDVENQV1dXV1dXV1cuIiwgIi4uUFBQLi4uLi4uLi4uLiJd',
+    colors: {
+      K: '#6E4A3A', // pipe
+      B: '#B5502E', // murstein
+      F: '#F08A24', // flammer
+      Y: '#FFD34D', // glør
+      S: '#9A8F87', // steinhylle
+      P: '#E9B66A', // pizzabunn
+      C: '#F6E3A0', // ost
+      T: '#D2402C', // tomat
+      W: '#A9773F'  // spade
+    }
   },
   14: {
     type: 'strands',
