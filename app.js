@@ -5,9 +5,9 @@
 // Hvilket spill som ligger bak hver luke
 const GAMES = {
   1: 'Wordle', 2: 'Zip', 3: 'Connies', 4: 'Pyralinks',
-  5: 'Nonogram', 6: 'Strands', 7: 'Minikryssord', 8: 'Pips',
+  5: 'Nonogram', 6: 'Strands', 7: 'Kryssord', 8: 'Pips',
   9: 'Wordle', 10: 'Zip', 11: 'Pyralinks', 12: 'Connies',
-  13: 'Nonogram', 14: 'Strands', 15: 'Sudoku', 16: 'Minikryssord',
+  13: 'Nonogram', 14: 'Strands', 15: 'Sudoku', 16: 'Kryssord',
   17: 'Pyralinks', 18: 'Wordle', 19: 'Zip', 20: 'Dobbel runde: Connies',
   21: 'Nonogram', 22: 'Sudoku', 23: 'Strands', 24: 'Finalen'
 };
