@@ -842,6 +842,7 @@ html, body {
   content: ''; position: absolute; inset: -5px; border-radius: 50%;
   border: 1.5px dashed rgba(157,190,230,.8);
 }
+.sd-cell.lit { background: #9DBEE6; color: #2A0710; transition: background .12s, color .12s; }
 .sd-cell.pop { animation: pop .3s ease-out; }
 
 .sd-bottom { width: 100%; max-width: calc(var(--cell) * 6); display: flex; align-items: center; justify-content: space-between; gap: 12px; }

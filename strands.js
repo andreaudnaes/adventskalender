@@ -21,7 +21,8 @@ window.Games.strands = (function () {
     const extra = new Set(data.extra);
     const storeKey = `advent-${day}`;
 
-    let found = [], bonus = [], hinted = [], hintsUsed = 0; // hinted: temaord som lyser opp
+    let found = [], bonus = [], hinted = [], revealed = [], hintsUsed = 0;
+    // hinted: temaord med ringer rundt bokstavene. revealed: temaord der rekkefølgen vises.
     try {
       const s = JSON.parse(localStorage.getItem(storeKey));
       if (s && Array.isArray(s.found)) {
@@ -29,10 +30,11 @@ window.Games.strands = (function () {
         bonus = s.bonus || [];
         hinted = (Array.isArray(s.hinted) ? s.hinted : (s.hinted ? [s.hinted] : [])).filter((w) => pathOf[w] && !found.includes(w));
         hintsUsed = s.hintsUsed || 0;
+        revealed = (s.revealed || []).filter((w) => hinted.includes(w));
       }
     } catch (e) { /* ignorer */ }
     const save = () => {
-      try { localStorage.setItem(storeKey, JSON.stringify({ found, bonus, hinted, hintsUsed })); } catch (e) { /* ignorer */ }
+      try { localStorage.setItem(storeKey, JSON.stringify({ found, bonus, hinted, revealed, hintsUsed })); } catch (e) { /* ignorer */ }
     };
 
     root.innerHTML = `
@@ -85,11 +87,25 @@ window.Games.strands = (function () {
       return `<polyline class="${cls}" points="${pts}"/>`;
     }
 
+    const pendingHint = () => hinted.find((w) => !found.includes(w) && !revealed.includes(w));
+
+    // Bokstavene i et avslørt ord lyser opp én etter én, om og om igjen
+    let step = 0;
+    const revealTimer = setInterval(() => {
+      step++;
+      revealed.forEach((w) => {
+        if (found.includes(w)) return;
+        const p = pathOf[w];
+        const pos = step % (p.length + 3); // en liten pause før det starter på nytt
+        p.forEach((i, k) => cells[i].classList.toggle('lit', k < pos && pos <= p.length));
+      });
+    }, 420);
+
     function draw() {
       const owner = {};
       found.forEach((w) => pathOf[w].forEach((i) => { owner[i] = w === data.span ? 'span' : 'theme'; }));
       cells.forEach((c, i) => {
-        c.classList.remove('span', 'theme', 'sel', 'hint');
+        c.classList.remove('span', 'theme', 'sel', 'hint', 'lit');
         if (owner[i]) c.classList.add(owner[i]);
         else if (current.includes(i)) c.classList.add('sel');
         if (hinted.some((w) => !found.includes(w) && pathOf[w].includes(i))) c.classList.add('hint');
@@ -106,7 +122,7 @@ window.Games.strands = (function () {
       const earned = Math.max(0, Math.floor(bonus.length / HINT_EVERY) - hintsUsed);
       const partial = (bonus.length % HINT_EVERY) / HINT_EVERY;
       const left = themeWords.filter((w) => !found.includes(w) && !hinted.includes(w));
-      const canHint = earned > 0 && left.length > 0;
+      const canHint = earned > 0 && (pendingHint() || left.length > 0);
       hintBtn.disabled = !canHint;
       hintFill.style.width = `${(canHint ? 1 : partial) * 100}%`;
       hintText.textContent = earned > 1 ? `Hint ×${earned}` : 'Hint';
@@ -150,6 +166,7 @@ window.Games.strands = (function () {
       if (theme) {
         found.push(theme);
         hinted = hinted.filter((w) => w !== theme);
+        revealed = revealed.filter((w) => w !== theme);
         save();
         draw();
         const isSpan = theme === data.span;
@@ -216,11 +233,17 @@ window.Games.strands = (function () {
 
     hintBtn.addEventListener('click', () => {
       if (hintBtn.disabled) return;
-      // Lys opp neste temaord som ikke er funnet eller allerede hintet (spangrammet til slutt)
-      const left = themeWords.filter((w) => !found.includes(w) && !hinted.includes(w));
-      const next = left.find((w) => w !== data.span) || left[0];
-      if (!next) return;
-      hinted.push(next);
+      // Er et temaord allerede ringet inn, viser neste hint rekkefølgen i det.
+      // Ellers ringes neste temaord inn (spangrammet til slutt).
+      const pending = pendingHint();
+      if (pending) {
+        revealed.push(pending);
+      } else {
+        const left = themeWords.filter((w) => !found.includes(w) && !hinted.includes(w));
+        const next = left.find((w) => w !== data.span) || left[0];
+        if (!next) return;
+        hinted.push(next);
+      }
       hintsUsed++;
       save();
       draw();
@@ -238,11 +261,11 @@ window.Games.strands = (function () {
     draw();
     if (found.length === themeWords.length) win(false);
 
-    return () => clearTimeout(flash.t);
+    return () => { clearTimeout(flash.t); clearInterval(revealTimer); };
   }
 
   // Kun for testing: lagret tilstand som om alle ordene er funnet
-  const solvedState = (puzzle) => ({ found: Object.keys(decode(puzzle.data).words), bonus: [], hinted: [], hintsUsed: 0 });
+  const solvedState = (puzzle) => ({ found: Object.keys(decode(puzzle.data).words), bonus: [], hinted: [], revealed: [], hintsUsed: 0 });
 
   return { mount, solvedState };
 })();
