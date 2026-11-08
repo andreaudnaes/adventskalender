@@ -97,7 +97,7 @@ window.Games.strands = (function () {
         if (found.includes(w)) return;
         const p = pathOf[w];
         const pos = step % (p.length + 3); // en liten pause før det starter på nytt
-        p.forEach((i, k) => cells[i].classList.toggle('lit', k < pos && pos <= p.length));
+        p.forEach((i, k) => cells[i].classList.toggle('lit', k === pos - 1)); // bare én bokstav om gangen
       });
     }, 420);
 
@@ -184,6 +184,8 @@ window.Games.strands = (function () {
         bonus.push(word);
         save();
         draw();
+        // Lite blink på hint-knappen, så man ser at hint samles opp
+        hintBtn.classList.remove('blink'); void hintBtn.offsetWidth; hintBtn.classList.add('blink');
         flash(word, 'bonus');
         return;
       }
