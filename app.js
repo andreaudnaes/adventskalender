@@ -104,6 +104,10 @@ const REWARDS = {
     title: 'Du klarte det \u2665\uFE0E',
     text: 'Knut på fisketur'
   },
+  13: {
+    title: 'Du klarte det \u2665\uFE0E',
+    text: 'Vår fremtidige pizzaovn😋'
+  },
   14: {
     title: 'Du klarte det \u2665\uFE0E',
     text: '«Jeg må slutte å trene ass»'
