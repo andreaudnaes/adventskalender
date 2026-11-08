@@ -64,7 +64,7 @@ const PUZZLES = {
   },
   13: {
     type: 'nonogram',
-    data: 'WyIuLi4uLi4uLi5LSy4uLi4iLCAiLi4uLkJCQkJCS0suLi4uIiwgIi4uQkJCQkJCQkJCQkIuLiIsICIuQkJCQkJCQkJCQkJCQi4iLCAiLkJCQkJCLi4uQkJCQkIuIiwgIi5CQkJCLi4uLi5CQkJCLiIsICIuQkJCQi4uRi4uQkJCQi4iLCAiLkJCQkIuRllGLkJCQkIuIiwgIi5CQkJCRllZWUZCQkJCLiIsICJTU1NTU1NTU1NTU1NTU1MiLCAiLlNTLi4uLi4uLi4uU1MuIiwgIi4uLi4uLi4uLi4uLi4uLiIsICIuLlBQUC4uLi4uLi4uLi4iLCAiLlBDVENQV1dXV1dXV1cuIiwgIi4uUFBQLi4uLi4uLi4uLiJd',
+    data: 'WyIuLi4uLi4uLi4uLlIuUi4iLCAiLi4uLi4uLi4uS0suUi4uIiwgIi4uLi4uQkIuQktLLi4uLiIsICIuLi5CQkJCQi5CQkIuQi4iLCAiLi5CQi5CQkJCQi5CQkIuIiwgIi5CQkJCQi4uLkJCQi5CLiIsICIuQkIuQi4uLi4uQi5CQi4iLCAiLkJCQi4uLkYuLi5CQkIuIiwgIi5CLkJCLkZZRi5CLkJCLiIsICIuQkJCQkZZWVlGQkJCQi4iLCAiU1NTLlNTU1NTLlNTUy5TIiwgIi5TUy4uLi4uLi4uLlNTLiIsICIuLlBQUC4uLi4uLi4uLlciLCAiLlBUQ1RQV1dXV1dXV1cuIiwgIi4uUFBQLi4uLi4uLi4uVyJd',
     colors: {
       K: '#6E4A3A', // pipe
       B: '#B5502E', // murstein
@@ -74,7 +74,8 @@ const PUZZLES = {
       P: '#E9B66A', // pizzabunn
       C: '#F6E3A0', // ost
       T: '#D2402C', // tomat
-      W: '#A9773F'  // spade
+      W: '#A9773F', // spade
+      R: '#C9C2BC'  // røyk
     }
   },
   14: {
