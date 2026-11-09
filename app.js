@@ -28,6 +28,7 @@ const LAYOUT = [
 const PUZZLES = {
   1: { type: 'ordgjetting', answer: 'S0FLQU8=' },
   9: { type: 'ordgjetting', answer: 'UElBTk8=' },
+  18: { type: 'ordgjetting', answer: 'WUFUWlk=' },
   2: {
     type: 'zip',
     size: 8,
