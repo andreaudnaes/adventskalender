@@ -113,6 +113,9 @@ window.Games.pips = (function () {
       el.dataset.k = k;
       el.setAttribute('role', 'button');
       el.tabIndex = 0;
+      // Fjern riste-klassen når animasjonen er ferdig, ellers starter den på nytt
+      // hver gang brikken flyttes rundt i DOM-en
+      el.addEventListener('animationend', () => el.classList.remove('nope'));
       return el;
     });
 
