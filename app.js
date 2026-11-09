@@ -58,8 +58,8 @@ const PUZZLES = {
   10: {
     type: 'zip',
     size: 8,
-    numbers: [[3, 0, 1], [0, 6, 2], [1, 1, 3], [7, 7, 4], [6, 0, 5], [7, 0, 6], [5, 2, 7], [5, 1, 8], [5, 4, 9], [6, 4, 10]],
-    solution: 'WzI0LCAxNiwgOCwgMCwgMSwgMiwgMywgNCwgNSwgNiwgNywgMTUsIDE0LCAxMywgMTIsIDExLCAxMCwgOSwgMTcsIDE4LCAxOSwgMjAsIDIxLCAyMiwgMjMsIDMxLCAzOSwgNDcsIDU1LCA2MywgNjIsIDU0LCA0NiwgMzgsIDMwLCAyOSwgMjgsIDI3LCAyNiwgMjUsIDMzLCAzMiwgNDAsIDQ4LCA1NiwgNTcsIDU4LCA1OSwgNjAsIDYxLCA1MywgNDUsIDM3LCAzNiwgMzUsIDM0LCA0MiwgNDEsIDQ5LCA1MCwgNTEsIDQzLCA0NCwgNTJd'
+    numbers: [[2, 2, 1], [2, 4, 2], [7, 1, 3], [4, 1, 4], [7, 3, 5], [4, 4, 6], [6, 5, 7], [2, 0, 8], [1, 6, 9], [4, 6, 10], [6, 7, 11]],
+    solution: 'WzE4LCAxOSwgMjAsIDI4LCAyNywgMjYsIDI1LCAyNCwgMzIsIDQwLCA0OCwgNTYsIDU3LCA0OSwgNDEsIDMzLCAzNCwgNDIsIDUwLCA1OCwgNTksIDUxLCA0MywgMzUsIDM2LCA0NCwgNTIsIDYwLCA2MSwgNTMsIDQ1LCAzNywgMjksIDIxLCAxMywgMTIsIDExLCAxMCwgOSwgMTcsIDE2LCA4LCAwLCAxLCAyLCAzLCA0LCA1LCA2LCA3LCAxNSwgMTQsIDIyLCAyMywgMzEsIDMwLCAzOCwgMzksIDQ3LCA0NiwgNTQsIDYyLCA2MywgNTVd'
   },
   11: {
     type: 'pyralinks',
