@@ -47,6 +47,7 @@ window.Games.pips = (function () {
         <div class="pp-board">
           <div class="pp-cells"></div>
           <div class="pp-placed"></div>
+          <div class="pp-marks" aria-hidden="true"></div>
         </div>
         <p class="pp-msg" role="status" aria-live="polite"></p>
         <div class="pp-tray" aria-label="Brikker"></div>
@@ -54,6 +55,7 @@ window.Games.pips = (function () {
     const boardEl = root.querySelector('.pp-board');
     const cellsEl = root.querySelector('.pp-cells');
     const placedEl = root.querySelector('.pp-placed');
+    const marksEl = root.querySelector('.pp-marks');
     const trayEl = root.querySelector('.pp-tray');
     const msg = root.querySelector('.pp-msg');
 
@@ -164,15 +166,33 @@ window.Games.pips = (function () {
       });
       const allPlaced = doms.every((s) => s.at);
       let allOk = true;
+      const badRegions = [];
       badges.forEach((b, i) => {
         const st = regionState(i, grid);
         b.classList.toggle('ok', st === 'ok');
         b.classList.toggle('bad', allPlaced && st === 'bad');
+        if (allPlaced && st === 'bad') badRegions.push(i);
         if (st !== 'ok') allOk = false;
+      });
+      // Marker feltene som ikke stemmer (bare når alle brikkene er lagt)
+      marksEl.innerHTML = '';
+      badRegions.forEach((i) => {
+        const inRegion = (rr, cc) => regionOf[key(rr, cc)] === i;
+        d.regions[i].cells.forEach(([r, c]) => {
+          const m = document.createElement('div');
+          m.className = 'pp-wrong';
+          m.style.gridRow = r + 1;
+          m.style.gridColumn = c + 1;
+          if (!inRegion(r - 1, c)) m.classList.add('bt');
+          if (!inRegion(r + 1, c)) m.classList.add('bb');
+          if (!inRegion(r, c - 1)) m.classList.add('bl');
+          if (!inRegion(r, c + 1)) m.classList.add('br');
+          marksEl.append(m);
+        });
       });
       trayEl.classList.toggle('empty', allPlaced);
       if (allPlaced && allOk && !solved) { solved = true; save(); win(true); }
-      else if (allPlaced && !allOk) msg.textContent = 'Ikke helt riktig ennå';
+      else if (allPlaced && !allOk) msg.textContent = badRegions.length === 1 ? 'Ikke helt riktig ennå. Feltet markert med rødt stemmer ikke.' : 'Ikke helt riktig ennå. Feltene markert med rødt stemmer ikke.';
       else if (!solved) msg.textContent = '';
     }
 

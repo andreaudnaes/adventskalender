@@ -921,7 +921,19 @@ html, body {
 }
 .pp-badge > span { display: block; transform: rotate(-45deg); line-height: 1; font-variant-numeric: tabular-nums; }
 .pp-badge.ok { box-shadow: 0 0 0 2px var(--cream), 0 2px 5px rgba(0,0,0,.35); }
-.pp-badge.bad { box-shadow: 0 0 0 2px #F07A9A, 0 2px 5px rgba(0,0,0,.35); }
+.pp-badge.bad { background: #E0405F; color: #FFF6EA; box-shadow: 0 0 0 2px #FFF6EA, 0 2px 5px rgba(0,0,0,.35); }
+.pp-marks {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), var(--cell));
+  grid-template-rows: repeat(var(--rows), var(--cell));
+}
+.pp-wrong { background: rgba(224,64,95,.28); border: 0 solid #E0405F; animation: pp-wrong-in .35s ease-out; }
+.pp-wrong.bt { border-top-width: 3px; }
+.pp-wrong.bb { border-bottom-width: 3px; }
+.pp-wrong.bl { border-left-width: 3px; }
+.pp-wrong.br { border-right-width: 3px; }
+@keyframes pp-wrong-in { from { opacity: 0; } to { opacity: 1; } }
 
 .pp-dom {
   --c: var(--cell);
