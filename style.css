@@ -1116,7 +1116,7 @@ html, body {
 
 /* ---------- Teaser før 1. desember ---------- */
 .teaser {
-  --rib: 50px;
+  --rib: 30px;
   --cross: 38%;
   position: relative;
   min-height: 100vh; min-height: 100dvh;
@@ -1160,8 +1160,8 @@ html, body {
 .bow {
   all: unset; cursor: pointer;
   position: absolute; left: 50%; top: var(--cross);
-  width: min(300px, 80vw);
-  transform: translate(-50%, -44%);
+  width: min(380px, 96vw);
+  transform: translate(-50%, -37.5%);
   -webkit-tap-highlight-color: transparent;
   z-index: 2;
 }
@@ -1169,14 +1169,14 @@ html, body {
 .bow.wiggle { animation: bow-wiggle .6s ease-in-out; }
 .bow:focus-visible { outline: 2px solid var(--cream); outline-offset: 6px; border-radius: 12px; }
 @keyframes bow-wiggle {
-  0%, 100% { transform: translate(-50%, -44%) rotate(0); }
-  20% { transform: translate(-50%, -44%) rotate(-7deg); }
-  40% { transform: translate(-50%, -44%) rotate(6deg); }
-  60% { transform: translate(-50%, -44%) rotate(-3deg); }
-  80% { transform: translate(-50%, -44%) rotate(2deg); }
+  0%, 100% { transform: translate(-50%, -37.5%) rotate(0); }
+  20% { transform: translate(-50%, -37.5%) rotate(-7deg); }
+  40% { transform: translate(-50%, -37.5%) rotate(6deg); }
+  60% { transform: translate(-50%, -37.5%) rotate(-3deg); }
+  80% { transform: translate(-50%, -37.5%) rotate(2deg); }
 }
 .tag {
-  position: absolute; left: 50%; top: calc(var(--cross) + 150px);
+  position: absolute; left: 50%; top: calc(var(--cross) + min(230px, 58vw));
   transform: translateX(-50%) rotate(-4deg);
   z-index: 3;
   padding: 22px 28px 20px;
