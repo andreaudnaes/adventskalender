@@ -154,6 +154,22 @@ function unlockedDays() {
 // -------------------------------------------------------------
 const $ = (id) => document.getElementById(id);
 const today = unlockedDays();
+
+// -------------------------------------------------------------
+//  Teaser: før 1. desember vises bare en innpakket gave.
+//  (I testmodus: ?test=N viser kalenderen, ?teaser viser teaseren.)
+// -------------------------------------------------------------
+const params = new URLSearchParams(location.search);
+const showTeaser = (TEST_MODE && params.has('teaser')) || (today === 0 && !(TEST_MODE && params.has('test')));
+if (showTeaser) {
+  $('teaser').hidden = false;
+  $('home').hidden = true;
+  const gift = $('gift');
+  gift.addEventListener('click', () => {
+    gift.classList.remove('wiggle'); void gift.offsetWidth; gift.classList.add('wiggle');
+  });
+  gift.addEventListener('animationend', (e) => { if (e.animationName === 'gift-wiggle') gift.classList.remove('wiggle'); });
+}
 let busy = false;
 let toastTimer;
 
@@ -383,7 +399,7 @@ function showHome() {
   busy = false;
   if (cleanup) { cleanup(); cleanup = null; }
   $('game').hidden = true;
-  $('home').hidden = false;
+  $('home').hidden = showTeaser;
   buildGrid();
 }
 

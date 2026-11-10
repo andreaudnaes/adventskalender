@@ -1113,3 +1113,32 @@ html, body {
   cursor: pointer;
 }
 .test-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* ---------- Teaser før 1. desember ---------- */
+.teaser {
+  min-height: 100vh; min-height: 100dvh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px; padding: 32px 24px 48px; text-align: center;
+  background: radial-gradient(120% 80% at 50% 35%, #651528 0%, var(--bg) 55%, var(--bg-deep) 100%);
+}
+.teaser[hidden] { display: none; }
+.gift {
+  all: unset; cursor: pointer; width: min(240px, 66vw); margin-bottom: 10px;
+  -webkit-tap-highlight-color: transparent;
+  animation: gift-float 4s ease-in-out infinite;
+  filter: drop-shadow(0 10px 24px rgba(0,0,0,.35));
+}
+.gift svg { display: block; width: 100%; height: auto; }
+.gift.wiggle { animation: gift-wiggle .6s ease-in-out; }
+.gift:focus-visible { outline: 2px solid var(--gold); outline-offset: 6px; border-radius: 12px; }
+@keyframes gift-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes gift-wiggle {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(-6deg); } 40% { transform: rotate(5deg); }
+  60% { transform: rotate(-3deg); } 80% { transform: rotate(2deg); }
+}
+.teaser-title {
+  margin: 0; font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: clamp(40px, 12vw, 54px); line-height: 1.05; color: var(--gold-soft);
+}
+@media (prefers-reduced-motion: reduce) { .gift { animation: none; } }
