@@ -1116,7 +1116,7 @@ html, body {
 
 /* ---------- Teaser før 1. desember ---------- */
 .teaser {
-  --rib: 54px;
+  --rib: 50px;
   --cross: 38%;
   position: relative;
   min-height: 100vh; min-height: 100dvh;
@@ -1130,36 +1130,58 @@ html, body {
   background-position: 0 0, 11px 11px, 0 0;
 }
 .teaser[hidden] { display: none; }
-.ribbon { position: absolute; pointer-events: none; box-shadow: 0 0 18px rgba(0,0,0,.35); }
+.ribbon { position: absolute; pointer-events: none; }
+/* Satengullbånd: metallisk lys på tvers, fin vevstruktur på langs og falsede kanter */
 .ribbon-v {
   top: 0; bottom: 0; left: 50%; width: var(--rib); transform: translateX(-50%);
-  background: linear-gradient(90deg, #A67C3A 0%, #D6AE68 22%, #F3D99A 50%, #D6AE68 78%, #A67C3A 100%);
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.35) 0, rgba(0,0,0,0) 2px, rgba(255,240,200,.5) 3px, rgba(0,0,0,0) 4px,
+                    rgba(0,0,0,0) calc(100% - 4px), rgba(255,240,200,.4) calc(100% - 3px), rgba(0,0,0,0) calc(100% - 2px), rgba(0,0,0,.4) 100%),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.06) 0 1px, rgba(0,0,0,.05) 1px 2px, transparent 2px 3px),
+    linear-gradient(90deg, #6E4F1D 0%, #A57B36 8%, #D9B46A 18%, #F3DDA0 30%, #FCEFC4 38%, #E3C07A 48%, #B58B44 60%, #D8B166 72%, #F0D594 82%, #B98E46 92%, #7A5822 100%);
+  box-shadow: 0 0 0 1px rgba(60,30,10,.35), 4px 0 12px rgba(0,0,0,.35), -4px 0 12px rgba(0,0,0,.35);
 }
 .ribbon-h {
   left: 0; right: 0; top: var(--cross); height: var(--rib); transform: translateY(-50%);
-  background: linear-gradient(180deg, #A67C3A 0%, #D6AE68 22%, #F3D99A 50%, #D6AE68 78%, #A67C3A 100%);
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.35) 0, rgba(0,0,0,0) 2px, rgba(255,240,200,.5) 3px, rgba(0,0,0,0) 4px,
+                    rgba(0,0,0,0) calc(100% - 4px), rgba(255,240,200,.4) calc(100% - 3px), rgba(0,0,0,0) calc(100% - 2px), rgba(0,0,0,.4) 100%),
+    repeating-linear-gradient(180deg, rgba(255,255,255,.06) 0 1px, rgba(0,0,0,.05) 1px 2px, transparent 2px 3px),
+    linear-gradient(180deg, #6E4F1D 0%, #A57B36 8%, #D9B46A 18%, #F3DDA0 30%, #FCEFC4 38%, #E3C07A 48%, #B58B44 60%, #D8B166 72%, #F0D594 82%, #B98E46 92%, #7A5822 100%);
+  box-shadow: 0 0 0 1px rgba(60,30,10,.35), 0 4px 12px rgba(0,0,0,.35), 0 -4px 12px rgba(0,0,0,.35);
 }
+/* Glimt som glir sakte langs båndet */
+.ribbon::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(var(--shine-dir, 180deg), transparent 0%, rgba(255,250,230,0) 40%, rgba(255,250,230,.35) 50%, rgba(255,250,230,0) 60%, transparent 100%);
+  background-size: 100% 300%;
+  animation: ribbon-shine 7s ease-in-out infinite;
+  mix-blend-mode: soft-light;
+}
+.ribbon-h::after { --shine-dir: 90deg; background-size: 300% 100%; animation-name: ribbon-shine-h; }
+@keyframes ribbon-shine { 0% { background-position: 0 100%; } 60%, 100% { background-position: 0 0%; } }
+@keyframes ribbon-shine-h { 0% { background-position: 100% 0; } 60%, 100% { background-position: 0% 0; } }
+@media (prefers-reduced-motion: reduce) { .ribbon::after { animation: none; } }
 .bow {
   all: unset; cursor: pointer;
   position: absolute; left: 50%; top: var(--cross);
-  width: min(260px, 70vw);
-  transform: translate(-50%, -52%);
+  width: min(300px, 80vw);
+  transform: translate(-50%, -44%);
   -webkit-tap-highlight-color: transparent;
-  filter: drop-shadow(0 8px 16px rgba(0,0,0,.4));
   z-index: 2;
 }
 .bow svg { display: block; width: 100%; height: auto; }
 .bow.wiggle { animation: bow-wiggle .6s ease-in-out; }
 .bow:focus-visible { outline: 2px solid var(--cream); outline-offset: 6px; border-radius: 12px; }
 @keyframes bow-wiggle {
-  0%, 100% { transform: translate(-50%, -52%) rotate(0); }
-  20% { transform: translate(-50%, -52%) rotate(-7deg); }
-  40% { transform: translate(-50%, -52%) rotate(6deg); }
-  60% { transform: translate(-50%, -52%) rotate(-3deg); }
-  80% { transform: translate(-50%, -52%) rotate(2deg); }
+  0%, 100% { transform: translate(-50%, -44%) rotate(0); }
+  20% { transform: translate(-50%, -44%) rotate(-7deg); }
+  40% { transform: translate(-50%, -44%) rotate(6deg); }
+  60% { transform: translate(-50%, -44%) rotate(-3deg); }
+  80% { transform: translate(-50%, -44%) rotate(2deg); }
 }
 .tag {
-  position: absolute; left: 50%; top: calc(var(--cross) + 120px);
+  position: absolute; left: 50%; top: calc(var(--cross) + 150px);
   transform: translateX(-50%) rotate(-4deg);
   z-index: 3;
   padding: 22px 28px 20px;
