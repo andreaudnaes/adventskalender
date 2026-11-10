@@ -8,73 +8,46 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:wght@400;500;600&display=swap">
-  <link rel="stylesheet" href="style.css?v=202611101743">
+  <link rel="stylesheet" href="style.css?v=202611101745">
 </head>
 <body>
   <main class="app">
 
-    <!-- Teaser før 1. desember -->
+    <!-- Teaser før 1. desember: hele skjermen er en innpakket gave -->
     <section id="teaser" class="screen teaser" hidden>
-      <button type="button" class="gift" id="gift" aria-label="En gave som kan åpnes 1. desember">
-        <svg viewBox="0 0 240 260" aria-hidden="true">
+      <div class="ribbon ribbon-v" aria-hidden="true"></div>
+      <div class="ribbon ribbon-h" aria-hidden="true"></div>
+      <button type="button" class="bow" id="gift" aria-label="Gave som kan åpnes 1. desember">
+        <svg viewBox="0 0 240 150" aria-hidden="true">
           <defs>
             <linearGradient id="tg-gold" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#F3D99A"/>
+              <stop offset="0" stop-color="#F6DFA4"/>
               <stop offset=".45" stop-color="#D6AE68"/>
               <stop offset="1" stop-color="#A67C3A"/>
             </linearGradient>
             <linearGradient id="tg-gold-v" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0" stop-color="#B98C45"/>
-              <stop offset=".5" stop-color="#F0D28F"/>
+              <stop offset=".5" stop-color="#F3D99A"/>
               <stop offset="1" stop-color="#B98C45"/>
             </linearGradient>
-            <linearGradient id="tg-box" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#7A1A30"/>
-              <stop offset="1" stop-color="#5A1123"/>
-            </linearGradient>
-            <linearGradient id="tg-lid" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#8C2039"/>
-              <stop offset="1" stop-color="#6E1A2D"/>
-            </linearGradient>
-            <pattern id="tg-dots" width="16" height="16" patternUnits="userSpaceOnUse">
-              <circle cx="4" cy="4" r="1.3" fill="#D6AE68" opacity=".28"/>
-              <circle cx="12" cy="12" r="1.3" fill="#D6AE68" opacity=".28"/>
-            </pattern>
           </defs>
-          <!-- skygge -->
-          <ellipse cx="120" cy="248" rx="96" ry="8" fill="#000" opacity=".25"/>
-          <!-- eske -->
-          <rect x="34" y="118" width="172" height="126" rx="6" fill="url(#tg-box)"/>
-          <rect x="34" y="118" width="172" height="126" rx="6" fill="url(#tg-dots)"/>
-          <!-- lokk -->
-          <rect x="24" y="96" width="192" height="32" rx="6" fill="url(#tg-lid)"/>
-          <rect x="24" y="96" width="192" height="32" rx="6" fill="url(#tg-dots)"/>
-          <rect x="34" y="128" width="172" height="5" fill="#000" opacity=".18"/>
-          <!-- bånd -->
-          <rect x="108" y="96" width="24" height="148" fill="url(#tg-gold-v)"/>
-          <rect x="34" y="166" width="172" height="20" fill="url(#tg-gold)"/>
-          <rect x="108" y="166" width="24" height="20" fill="#F3D99A" opacity=".35"/>
-          <!-- sløyfe: haler -->
-          <path d="M116 92 L92 140 L102 136 L106 148 L124 98 Z" fill="url(#tg-gold)"/>
-          <path d="M124 92 L148 140 L138 136 L134 148 L116 98 Z" fill="url(#tg-gold)"/>
-          <!-- sløyfe: løkker -->
-          <path d="M120 88 C 96 52, 50 56, 56 82 C 60 102, 96 100, 120 92 Z" fill="url(#tg-gold)"/>
-          <path d="M120 88 C 144 52, 190 56, 184 82 C 180 102, 144 100, 120 92 Z" fill="url(#tg-gold)"/>
-          <path d="M118 88 C 100 66, 72 66, 70 80 C 70 90, 96 92, 118 90 Z" fill="#A67C3A" opacity=".45"/>
-          <path d="M122 88 C 140 66, 168 66, 170 80 C 170 90, 144 92, 122 90 Z" fill="#A67C3A" opacity=".45"/>
-          <!-- knute -->
-          <rect x="108" y="78" width="24" height="22" rx="7" fill="url(#tg-gold-v)"/>
+          <!-- haler -->
+          <path d="M112 70 L70 146 L84 140 L90 150 L128 78 Z" fill="url(#tg-gold)"/>
+          <path d="M128 70 L170 146 L156 140 L150 150 L112 78 Z" fill="url(#tg-gold)"/>
+          <!-- løkker -->
+          <path d="M120 64 C 92 8, 14 10, 22 54 C 28 88, 84 84, 120 72 Z" fill="url(#tg-gold)"/>
+          <path d="M120 64 C 148 8, 226 10, 218 54 C 212 88, 156 84, 120 72 Z" fill="url(#tg-gold)"/>
+          <path d="M116 64 C 94 30, 46 30, 42 52 C 42 68, 84 72, 116 68 Z" fill="#A67C3A" opacity=".45"/>
+          <path d="M124 64 C 146 30, 194 30, 198 52 C 198 68, 156 72, 124 68 Z" fill="#A67C3A" opacity=".45"/>
           <!-- glans -->
-          <path d="M64 70 C 74 62, 92 62, 104 72" stroke="#FFF3D1" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".6"/>
-          <path d="M136 72 C 148 62, 166 62, 176 70" stroke="#FFF3D1" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".6"/>
+          <path d="M34 40 C 48 24, 74 22, 92 32" stroke="#FFF3D1" stroke-width="3" fill="none" stroke-linecap="round" opacity=".55"/>
+          <path d="M148 32 C 166 22, 192 24, 206 40" stroke="#FFF3D1" stroke-width="3" fill="none" stroke-linecap="round" opacity=".55"/>
+          <!-- knute -->
+          <rect x="104" y="52" width="32" height="30" rx="9" fill="url(#tg-gold-v)"/>
         </svg>
       </button>
-      <p class="eyebrow">Adventskalender · 2026</p>
-      <h1 class="teaser-title">Kan åpnes<br>1. desember</h1>
-      <div class="ornament" aria-hidden="true">
-        <span></span>
-        <svg viewBox="0 0 24 24"><path d="M12 2l2.6 6.9L22 9.3l-5.8 4.6L18.2 21 12 17l-6.2 4 2-7.1L2 9.3l7.4-.4z"/></svg>
-        <span></span>
+      <div class="tag">
+        <p class="tag-text">Kan åpnes<br>1. desember</p>
       </div>
     </section>
 
@@ -141,15 +114,15 @@
     </div>
   </div>
 
-  <script src="ord.js?v=202611101743"></script>
-  <script src="wordle.js?v=202611101743"></script>
-  <script src="nonogram.js?v=202611101743"></script>
-  <script src="zip.js?v=202611101743"></script>
-  <script src="pyralinks.js?v=202611101743"></script>
-  <script src="connies.js?v=202611101743"></script>
-  <script src="strands.js?v=202611101743"></script>
-  <script src="pips.js?v=202611101743"></script>
-  <script src="kryssord.js?v=202611101743"></script>
-  <script src="app.js?v=202611101743"></script>
+  <script src="ord.js?v=202611101745"></script>
+  <script src="wordle.js?v=202611101745"></script>
+  <script src="nonogram.js?v=202611101745"></script>
+  <script src="zip.js?v=202611101745"></script>
+  <script src="pyralinks.js?v=202611101745"></script>
+  <script src="connies.js?v=202611101745"></script>
+  <script src="strands.js?v=202611101745"></script>
+  <script src="pips.js?v=202611101745"></script>
+  <script src="kryssord.js?v=202611101745"></script>
+  <script src="app.js?v=202611101745"></script>
 </body>
 </html>

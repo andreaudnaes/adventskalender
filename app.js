@@ -168,7 +168,7 @@ if (showTeaser) {
   gift.addEventListener('click', () => {
     gift.classList.remove('wiggle'); void gift.offsetWidth; gift.classList.add('wiggle');
   });
-  gift.addEventListener('animationend', (e) => { if (e.animationName === 'gift-wiggle') gift.classList.remove('wiggle'); });
+  gift.addEventListener('animationend', (e) => { if (e.animationName === 'bow-wiggle') gift.classList.remove('wiggle'); });
 }
 let busy = false;
 let toastTimer;
