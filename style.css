@@ -1116,7 +1116,8 @@ html, body {
 
 /* ---------- Teaser før 1. desember ---------- */
 .teaser {
-  --rib: 30px;
+  --bw: min(340px, 88vw);              /* bredden på sløyfa */
+  --rib: calc(var(--bw) * 73 / 510);   /* båndet er like bredt som i sløyfa */
   --cross: 38%;
   position: relative;
   min-height: 100vh; min-height: 100dvh;
@@ -1130,53 +1131,37 @@ html, body {
   background-position: 0 0, 11px 11px, 0 0;
 }
 .teaser[hidden] { display: none; }
-/* Båndene: ett flatt satengbånd i kors, med mykt lys på skrå over hele flaten */
-.ribbon-wrap {
-  position: absolute; inset: 0; pointer-events: none;
-  filter: drop-shadow(0 1px 1px rgba(40,10,10,.5)) drop-shadow(0 4px 10px rgba(0,0,0,.35));
+.ribbon { position: absolute; pointer-events: none; filter: drop-shadow(0 3px 6px rgba(0,0,0,.35)); }
+.ribbon-h {
+  left: 0; right: 0; top: var(--cross); height: var(--rib); transform: translateY(-50%);
+  background: url(band-h.png?v=202611101923) repeat-x; background-size: auto 100%;
 }
-.ribbons {
-  --r: calc(var(--rib) / 2);
-  position: absolute; inset: 0;
-  clip-path: polygon(
-    calc(50% - var(--r)) 0, calc(50% + var(--r)) 0,
-    calc(50% + var(--r)) calc(var(--cross) - var(--r)), 100% calc(var(--cross) - var(--r)),
-    100% calc(var(--cross) + var(--r)), calc(50% + var(--r)) calc(var(--cross) + var(--r)),
-    calc(50% + var(--r)) 100%, calc(50% - var(--r)) 100%,
-    calc(50% - var(--r)) calc(var(--cross) + var(--r)), 0 calc(var(--cross) + var(--r)),
-    0 calc(var(--cross) - var(--r)), calc(50% - var(--r)) calc(var(--cross) - var(--r)));
-  background:
-    radial-gradient(60% 30% at 50% 38%, rgba(255,246,214,.55), rgba(255,246,214,0) 70%),
-    linear-gradient(160deg, #A9803C 0%, #CFA75E 18%, #EBCF8E 34%, #F7E6B4 44%, #E2C07C 56%, #C49A52 72%, #DDBA74 86%, #B38842 100%);
+.ribbon-v {
+  top: 0; bottom: 0; left: 50%; width: var(--rib); transform: translateX(-50%);
+  background: url(band-v.png?v=202611101923) repeat-y; background-size: 100% auto;
 }
-.ribbons::after {
-  /* sakte glimt over båndet */
-  content: ''; position: absolute; inset: -50%;
-  background: linear-gradient(115deg, transparent 42%, rgba(255,252,238,.38) 50%, transparent 58%);
-  animation: ribbon-shine 8s ease-in-out infinite;
-}
-@keyframes ribbon-shine { 0% { transform: translate(-40%, -20%); } 55%, 100% { transform: translate(40%, 20%); } }
-@media (prefers-reduced-motion: reduce) { .ribbons::after { animation: none; opacity: 0; } }
 .bow {
   all: unset; cursor: pointer;
   position: absolute; left: 50%; top: var(--cross);
-  width: min(380px, 96vw);
-  transform: translate(-50%, -37.5%);
+  width: calc(var(--bw) * 1756 / 510);
+  transform: translate(-62.8%, -34.5%);
+  transform-origin: 62.8% 34.5%;
   -webkit-tap-highlight-color: transparent;
   z-index: 2;
+  filter: drop-shadow(0 6px 8px rgba(0,0,0,.3));
 }
-.bow svg { display: block; width: 100%; height: auto; }
+.bow-img { display: block; width: 100%; height: auto; -webkit-user-drag: none; user-select: none; }
 .bow.wiggle { animation: bow-wiggle .6s ease-in-out; }
 .bow:focus-visible { outline: 2px solid var(--cream); outline-offset: 6px; border-radius: 12px; }
 @keyframes bow-wiggle {
-  0%, 100% { transform: translate(-50%, -37.5%) rotate(0); }
-  20% { transform: translate(-50%, -37.5%) rotate(-7deg); }
-  40% { transform: translate(-50%, -37.5%) rotate(6deg); }
-  60% { transform: translate(-50%, -37.5%) rotate(-3deg); }
-  80% { transform: translate(-50%, -37.5%) rotate(2deg); }
+  0%, 100% { transform: translate(-62.8%, -34.5%) rotate(0); }
+  20% { transform: translate(-62.8%, -34.5%) rotate(-6deg); }
+  40% { transform: translate(-62.8%, -34.5%) rotate(5deg); }
+  60% { transform: translate(-62.8%, -34.5%) rotate(-3deg); }
+  80% { transform: translate(-62.8%, -34.5%) rotate(2deg); }
 }
 .tag {
-  position: absolute; left: 50%; top: calc(var(--cross) + min(230px, 58vw));
+  position: absolute; left: 50%; top: calc(var(--cross) + var(--bw) * .74);
   transform: translateX(-50%) rotate(-4deg);
   z-index: 3;
   padding: 22px 28px 20px;
