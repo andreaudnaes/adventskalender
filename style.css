@@ -1130,38 +1130,33 @@ html, body {
   background-position: 0 0, 11px 11px, 0 0;
 }
 .teaser[hidden] { display: none; }
-.ribbon { position: absolute; pointer-events: none; }
-/* Satengullbånd: metallisk lys på tvers, fin vevstruktur på langs og falsede kanter */
-.ribbon-v {
-  top: 0; bottom: 0; left: 50%; width: var(--rib); transform: translateX(-50%);
+/* Båndene: ett flatt satengbånd i kors, med mykt lys på skrå over hele flaten */
+.ribbon-wrap {
+  position: absolute; inset: 0; pointer-events: none;
+  filter: drop-shadow(0 1px 1px rgba(40,10,10,.5)) drop-shadow(0 4px 10px rgba(0,0,0,.35));
+}
+.ribbons {
+  --r: calc(var(--rib) / 2);
+  position: absolute; inset: 0;
+  clip-path: polygon(
+    calc(50% - var(--r)) 0, calc(50% + var(--r)) 0,
+    calc(50% + var(--r)) calc(var(--cross) - var(--r)), 100% calc(var(--cross) - var(--r)),
+    100% calc(var(--cross) + var(--r)), calc(50% + var(--r)) calc(var(--cross) + var(--r)),
+    calc(50% + var(--r)) 100%, calc(50% - var(--r)) 100%,
+    calc(50% - var(--r)) calc(var(--cross) + var(--r)), 0 calc(var(--cross) + var(--r)),
+    0 calc(var(--cross) - var(--r)), calc(50% - var(--r)) calc(var(--cross) - var(--r)));
   background:
-    linear-gradient(90deg, rgba(0,0,0,.35) 0, rgba(0,0,0,0) 2px, rgba(255,240,200,.5) 3px, rgba(0,0,0,0) 4px,
-                    rgba(0,0,0,0) calc(100% - 4px), rgba(255,240,200,.4) calc(100% - 3px), rgba(0,0,0,0) calc(100% - 2px), rgba(0,0,0,.4) 100%),
-    repeating-linear-gradient(90deg, rgba(255,255,255,.06) 0 1px, rgba(0,0,0,.05) 1px 2px, transparent 2px 3px),
-    linear-gradient(90deg, #6E4F1D 0%, #A57B36 8%, #D9B46A 18%, #F3DDA0 30%, #FCEFC4 38%, #E3C07A 48%, #B58B44 60%, #D8B166 72%, #F0D594 82%, #B98E46 92%, #7A5822 100%);
-  box-shadow: 0 0 0 1px rgba(60,30,10,.35), 4px 0 12px rgba(0,0,0,.35), -4px 0 12px rgba(0,0,0,.35);
+    radial-gradient(60% 30% at 50% 38%, rgba(255,246,214,.55), rgba(255,246,214,0) 70%),
+    linear-gradient(160deg, #A9803C 0%, #CFA75E 18%, #EBCF8E 34%, #F7E6B4 44%, #E2C07C 56%, #C49A52 72%, #DDBA74 86%, #B38842 100%);
 }
-.ribbon-h {
-  left: 0; right: 0; top: var(--cross); height: var(--rib); transform: translateY(-50%);
-  background:
-    linear-gradient(180deg, rgba(0,0,0,.35) 0, rgba(0,0,0,0) 2px, rgba(255,240,200,.5) 3px, rgba(0,0,0,0) 4px,
-                    rgba(0,0,0,0) calc(100% - 4px), rgba(255,240,200,.4) calc(100% - 3px), rgba(0,0,0,0) calc(100% - 2px), rgba(0,0,0,.4) 100%),
-    repeating-linear-gradient(180deg, rgba(255,255,255,.06) 0 1px, rgba(0,0,0,.05) 1px 2px, transparent 2px 3px),
-    linear-gradient(180deg, #6E4F1D 0%, #A57B36 8%, #D9B46A 18%, #F3DDA0 30%, #FCEFC4 38%, #E3C07A 48%, #B58B44 60%, #D8B166 72%, #F0D594 82%, #B98E46 92%, #7A5822 100%);
-  box-shadow: 0 0 0 1px rgba(60,30,10,.35), 0 4px 12px rgba(0,0,0,.35), 0 -4px 12px rgba(0,0,0,.35);
+.ribbons::after {
+  /* sakte glimt over båndet */
+  content: ''; position: absolute; inset: -50%;
+  background: linear-gradient(115deg, transparent 42%, rgba(255,252,238,.38) 50%, transparent 58%);
+  animation: ribbon-shine 8s ease-in-out infinite;
 }
-/* Glimt som glir sakte langs båndet */
-.ribbon::after {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(var(--shine-dir, 180deg), transparent 0%, rgba(255,250,230,0) 40%, rgba(255,250,230,.35) 50%, rgba(255,250,230,0) 60%, transparent 100%);
-  background-size: 100% 300%;
-  animation: ribbon-shine 7s ease-in-out infinite;
-  mix-blend-mode: soft-light;
-}
-.ribbon-h::after { --shine-dir: 90deg; background-size: 300% 100%; animation-name: ribbon-shine-h; }
-@keyframes ribbon-shine { 0% { background-position: 0 100%; } 60%, 100% { background-position: 0 0%; } }
-@keyframes ribbon-shine-h { 0% { background-position: 100% 0; } 60%, 100% { background-position: 0% 0; } }
-@media (prefers-reduced-motion: reduce) { .ribbon::after { animation: none; } }
+@keyframes ribbon-shine { 0% { transform: translate(-40%, -20%); } 55%, 100% { transform: translate(40%, 20%); } }
+@media (prefers-reduced-motion: reduce) { .ribbons::after { animation: none; opacity: 0; } }
 .bow {
   all: unset; cursor: pointer;
   position: absolute; left: 50%; top: var(--cross);
